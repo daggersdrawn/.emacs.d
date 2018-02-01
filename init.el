@@ -4,3 +4,6 @@
 ;; same way that the noonday sun does the stars. It is not just bigger
 ;; and brighter; it simply makes everything else vanish."
 ;; -Neal Stephenson, "In the Beginning was the Command Line"
+
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
