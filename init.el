@@ -22,3 +22,10 @@
              :ensure t)
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
+
+;; Keep ~/.emacs.d/ clean from auto-generated configuration and persistent data
+(use-package no-littering
+  :ensure t)
+(setq auto-save-file-name-transforms
+      `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+(setq custom-file (no-littering-expand-etc-file-name "custom.el"))
