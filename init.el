@@ -16,3 +16,9 @@
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
+
+;; Ensure environment variables in Emacs look the same as in the user's shell
+(use-package exec-path-from-shell
+             :ensure t)
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
