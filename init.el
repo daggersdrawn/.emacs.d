@@ -54,3 +54,11 @@
 (use-package zenburn-theme
   :ensure t)
 (load-theme 'zenburn t)
+
+;; When emacs is running in a window system and not in a character based-terminal.
+;;   https://www.gnu.org/software/emacs/manual/html_node/elisp/Window-Systems.html
+(when window-system
+  (setq frame-title-format '(buffer-file-name "%f" ("%b")))  ;; https://www.emacswiki.org/emacs/FrameTitle
+  (tooltip-mode -1)  ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Tooltips.htmlm
+  (mouse-wheel-mode t)  ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Mouse-Commands.html
+  (blink-cursor-mode -1))  ;; https://www.emacswiki.org/emacs/NonBlinkingCursor
