@@ -12,25 +12,33 @@
 (dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode horizontal-scroll-bar-mode))
   (when (fboundp mode) (funcall mode -1)))
 
+;; A simple package manager for Emacs, and a repository of pre-packed Emacs Lisp code.
+;;   https://www.emacswiki.org/emacs/ELPA
+;;
 ;; MELPA (Milkypostman’s Emacs Lisp Package Archive)
 ;; The largest and most up-to-date repository of Emacs packages.
+;;   https://github.com/melpa/melpa
 (require 'package)
 (setq package-enable-at-startup nil)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+				 ("melpa" . "http://melpa.org/packages/")))
 (package-initialize)
 
-;; Isolate package configuration in a performance-oriented and tidy way
+;; Isolate package configuration in a performance-oriented and tidy way.
+;;   https://github.com/jwiegley/use-package
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
 
-;; Ensure environment variables in Emacs look the same as in the user's shell
+;; Ensure environment variables inside Emacs look the same as in the user's shell.
+;;   https://github.com/purcell/exec-path-from-shell
 (use-package exec-path-from-shell
   :ensure t)
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
 
-;; Keep ~/.emacs.d/ clean from auto-generated configuration and persistent data
+;; Keep ~/.emacs.d/ clean from auto-generated configuration and persistent data.
+;;   https://github.com/emacscollective/no-littering
 (use-package no-littering
   :ensure t)
 (setq auto-save-file-name-transforms
@@ -42,6 +50,7 @@
 (defconst IS-MACOS (eq system-type 'darwin))
 
 ;; Zenburn theme
+;;   https://github.com/bbatsov/zenburn-emacs
 (use-package zenburn-theme
   :ensure t)
 (load-theme 'zenburn t)
