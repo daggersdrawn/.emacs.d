@@ -66,7 +66,7 @@
 ;; Column and line numbers
 ;;   https://www.gnu.org/software/emacs/manual/html_node/efaq/Displaying-the-current-line-or-column.html
 (setq-default column-number-mode t)
-(when (version <= "26.0.50" emacs-version)
+(when (version<= "26.0.50" emacs-version)
   (global-display-line-numbers-mode))  ;; https://www.emacswiki.org/emacs/LineNumbers
 
 ;; Use only spaces and set the tab width.
