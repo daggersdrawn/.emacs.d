@@ -73,3 +73,7 @@
 ;;   https://www.emacswiki.org/emacs/IndentationBasics
 (setq-default indent-tabs-mode nil
               tab-width 4)
+
+;; Require final newlines.
+;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Customize-Save.html
+(setq-default require-final-newline t)
