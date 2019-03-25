@@ -68,3 +68,8 @@
 (setq-default column-number-mode t)
 (when (version <= "26.0.50" emacs-version)
   (global-display-line-numbers-mode))  ;; https://www.emacswiki.org/emacs/LineNumbers
+
+;; Use only spaces and set the tab width.
+;;   https://www.emacswiki.org/emacs/IndentationBasics
+(setq-default indent-tabs-mode nil
+              tab-width 4)
