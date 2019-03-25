@@ -5,6 +5,9 @@
 ;; and brighter; it simply makes everything else vanish."
 ;; -Neal Stephenson, "In the Beginning was the Command Line"
 
+;; The Emacs Lisp Style Guide
+;; https://github.com/bbatsov/emacs-lisp-style-guide
+
 ;; MELPA (Milkypostman’s Emacs Lisp Package Archive)
 ;; The largest and most up-to-date repository of Emacs packages.
 (require 'package)
@@ -19,7 +22,7 @@
 
 ;; Ensure environment variables in Emacs look the same as in the user's shell
 (use-package exec-path-from-shell
-             :ensure t)
+  :ensure t)
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
 
