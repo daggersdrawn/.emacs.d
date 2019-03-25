@@ -40,3 +40,8 @@
 ;; GNU/Linux or macOS?
 (defconst IS-GNULINUX (eq system-type 'gnu/linux))
 (defconst IS-MACOS (eq system-type 'darwin))
+
+;; Zenburn theme
+(use-package zenburn-theme
+  :ensure t)
+(load-theme 'zenburn t)
