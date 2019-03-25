@@ -77,3 +77,7 @@
 ;; Require final newlines.
 ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Customize-Save.html
 (setq-default require-final-newline t)
+
+;; Show trailing whitespace and delete on save.
+(setq-default show-trailing-whitespace t)
+(add-hook 'before-save-hook 'delete-trailing-whitespace)  ;; https://www.emacswiki.org/emacs/DeletingWhitespace
