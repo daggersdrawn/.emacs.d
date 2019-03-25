@@ -8,6 +8,10 @@
 ;; The Emacs Lisp Style Guide
 ;; https://github.com/bbatsov/emacs-lisp-style-guide
 
+;; Turn off mouse interface early in startup to avoid momentary display
+(dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode horizontal-scroll-bar-mode))
+  (when (fboundp mode) (funcall mode -1)))
+
 ;; MELPA (Milkypostman’s Emacs Lisp Package Archive)
 ;; The largest and most up-to-date repository of Emacs packages.
 (require 'package)
