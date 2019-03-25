@@ -62,3 +62,9 @@
   (tooltip-mode -1)  ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Tooltips.htmlm
   (mouse-wheel-mode t)  ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Mouse-Commands.html
   (blink-cursor-mode -1))  ;; https://www.emacswiki.org/emacs/NonBlinkingCursor
+
+;; Column and line numbers
+;;   https://www.gnu.org/software/emacs/manual/html_node/efaq/Displaying-the-current-line-or-column.html
+(setq-default column-number-mode t)
+(when (version <= "26.0.50" emacs-version)
+  (global-display-line-numbers-mode))  ;; https://www.emacswiki.org/emacs/LineNumbers
