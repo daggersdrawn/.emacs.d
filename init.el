@@ -90,3 +90,12 @@
 
 ;; Indicate empty lines in the fringe.
 (setq-default indicate-empty-lines t) ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Fringe-Indicators.html
+
+;; Emacs’s built-in ispell package handles spell-checking and correction.
+;; GNU Aspell is a Free and Open Source spell checker designed to eventually replace Ispell.
+(setq-default ispell-dictionary "en_US")
+(setq-default ispell-program-name (if IS-GNULINUX "/usr/bin/aspell" (if IS-MACOS "/usr/local/bin/aspell")))
+;; Flyspell provides on-the-fly checking and highlighting of misspellings.
+(eval-after-load "ispell"
+  '(when (executable-find ispell-program-name)
+     (add-hook 'text-mode-hook 'turn-on-flyspell)))
