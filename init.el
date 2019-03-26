@@ -54,6 +54,11 @@
 (set-face-attribute 'default nil
                     :family "InconsolataGo Nerd Font" :height 140)
 
+(when IS-MACOS
+  ;; Set up Emacs as an edit server, so that it "listens" for external edit requests and acts accordingly.
+  ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html
+  (server-start))
+
 ;; Zenburn theme
 ;;   https://github.com/bbatsov/zenburn-emacs
 (use-package zenburn-theme
