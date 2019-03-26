@@ -162,6 +162,16 @@
 ;;   https://www.emacswiki.org/emacs/DeleteSelectionMode
 (delete-selection-mode t)
 
+;; Improve the standard text representation of various identifiers/symbols.
+(global-prettify-symbols-mode 1)
+(setq prettify-symbols-alist
+      '(
+        ("lambda" . ?λ)
+        ("->" . ?→)
+        ("=>" . ?⇒)
+        ("map" . ?↦)
+        ))
+
 (defun ask-before-closing ()
   "Prompt before quit."
   (interactive)
