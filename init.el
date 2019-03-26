@@ -124,6 +124,10 @@
   '(when (executable-find ispell-program-name)
      (add-hook 'text-mode-hook 'turn-on-flyspell)))
 
+;; Set cursor color.
+;;   https://www.gnu.org/software/emacs/manual/html_node/eintr/X11-Colors.html
+(set-cursor-color "#f0dfaf")
+
 ;; Automatically rescan the Imenu facility.
 ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Imenu.html
 (setq-default imenu-auto-rescan t)
