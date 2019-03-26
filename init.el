@@ -158,3 +158,7 @@
     (message "Canceled exit")))
 (global-set-key (kbd "C-x C-c") 'ask-before-closing)
 (global-set-key (kbd "C-z") 'ask-before-closing)
+
+;; Follow symlinks and do not ask.
+;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/General-VC-Options.html
+(setq vc-follow-symlinks t)
