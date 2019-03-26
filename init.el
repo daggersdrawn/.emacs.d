@@ -127,3 +127,14 @@
 ;; Some users want to always use `y-or-n-p', never `yes-or-no-p'.
 ;;   https://www.emacswiki.org/emacs/YesOrNoP
 (defalias 'yes-or-no-p 'y-or-n-p)
+
+;; Prompt before quit.
+(defun ask-before-closing ()
+  (interactive)
+  (if (y-or-n-p (format "Are you sure you want to quit Emacs? "))
+      (if (< emacs-major-version 22)
+          (save-buffers-kill-terminal)
+        (save-buffers-kill-emacs))
+    (message "Canceled exit")))
+(global-set-key (kbd "C-x C-c") 'ask-before-closing)
+(global-set-key (kbd "C-z") 'ask-before-closing)
