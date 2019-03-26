@@ -132,6 +132,10 @@
 ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Mouse-Avoidance.html
 (mouse-avoidance-mode 'jump)
 
+;; Keep cursor in same relative row and column during PgUP/DN.
+;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Scrolling.html
+(setq scroll-preserve-screen-position t)
+
 ;; Automatically rescan the Imenu facility.
 ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Imenu.html
 (setq-default imenu-auto-rescan t)
