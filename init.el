@@ -49,6 +49,12 @@
       `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 (setq custom-file (no-littering-expand-etc-file-name "custom.el"))
 
+;; Zenburn theme
+;;   https://github.com/bbatsov/zenburn-emacs
+(use-package zenburn-theme
+  :ensure t)
+(load-theme 'zenburn t)
+
 ;; Globally set the default font.
 ;;   https://www.emacswiki.org/emacs/SetFonts
 (set-face-attribute 'default nil
@@ -70,12 +76,6 @@
   ;;   https://www.emacswiki.org/emacs/FullScreen
   (custom-set-variables
    '(initial-frame-alist (quote ((fullscreen . maximized))))))
-
-;; Zenburn theme
-;;   https://github.com/bbatsov/zenburn-emacs
-(use-package zenburn-theme
-  :ensure t)
-(load-theme 'zenburn t)
 
 ;; When emacs is running in a window system and not in a character based-terminal.
 ;;   https://www.gnu.org/software/emacs/manual/html_node/elisp/Window-Systems.html
