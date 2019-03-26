@@ -170,3 +170,7 @@
 ;; Follow symlinks and do not ask.
 ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/General-VC-Options.html
 (setq vc-follow-symlinks t)
+
+;; Automatically reverts the current buffer when its visited file changes on disk.
+;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Reverting.html
+(global-auto-revert-mode 1)
