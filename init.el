@@ -107,6 +107,10 @@
 ;;   https://www.emacswiki.org/emacs/HighlightCurrentLine
 (global-hl-line-mode 1)
 
+;; Highlight matching pairs of parentheses and other characters when the point is on them.
+;;   https://www.emacswiki.org/emacs/ShowParenMode
+(show-paren-mode 1)
+
 ;; Emacs’s built-in ispell package handles spell-checking and correction.
 ;; GNU Aspell is a Free and Open Source spell checker designed to eventually replace Ispell.
 (setq-default ispell-dictionary "en_US")
