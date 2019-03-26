@@ -60,7 +60,12 @@
   (server-start)
 
    ;; Do not make new frames when opening a new file with Emacs.
-  (setq ns-pop-up-frames nil))
+  (setq ns-pop-up-frames nil)
+
+  ;; Configuring fullscreen mode.
+  ;;   https://www.emacswiki.org/emacs/FullScreen
+  (custom-set-variables
+   '(initial-frame-alist (quote ((fullscreen . maximized))))))
 
 ;; Zenburn theme
 ;;   https://github.com/bbatsov/zenburn-emacs
