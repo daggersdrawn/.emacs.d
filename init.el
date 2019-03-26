@@ -128,6 +128,10 @@
 ;;   https://www.gnu.org/software/emacs/manual/html_node/eintr/X11-Colors.html
 (set-cursor-color "#f0dfaf")
 
+;; If the cursor gets too close to the pointer, displace the pointer by a random distance and direction.
+;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Mouse-Avoidance.html
+(mouse-avoidance-mode 'jump)
+
 ;; Automatically rescan the Imenu facility.
 ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Imenu.html
 (setq-default imenu-auto-rescan t)
