@@ -156,8 +156,8 @@
 ;;   https://www.emacswiki.org/emacs/DeleteSelectionMode
 (delete-selection-mode t)
 
-;; Prompt before quit.
 (defun ask-before-closing ()
+  "Prompt before quit."
   (interactive)
   (if (y-or-n-p (format "Are you sure you want to quit Emacs? "))
       (if (< emacs-major-version 22)
