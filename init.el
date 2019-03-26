@@ -45,6 +45,12 @@
       `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 (setq custom-file (no-littering-expand-etc-file-name "custom.el"))
 
+;; Globally set the default font.
+;;   https://www.emacswiki.org/emacs/SetFonts
+(set-face-attribute 'default nil
+                    :family "InconsolataGo Nerd Font" :height 140)
+
+
 ;; GNU/Linux or macOS?
 (defconst IS-GNULINUX (eq system-type 'gnu/linux))
 (defconst IS-MACOS (eq system-type 'darwin))
