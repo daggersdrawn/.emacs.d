@@ -144,6 +144,10 @@
 ;;   https://www.emacswiki.org/emacs/DeadKeys
 (require 'iso-transl)
 
+;; Delete selection on a key press.
+;;   https://www.emacswiki.org/emacs/DeleteSelectionMode
+(delete-selection-mode t)
+
 ;; Prompt before quit.
 (defun ask-before-closing ()
   (interactive)
