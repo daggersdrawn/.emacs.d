@@ -16,6 +16,10 @@
 (defconst IS-GNULINUX (eq system-type 'gnu/linux))
 (defconst IS-MACOS (eq system-type 'darwin))
 
+;; Disable startup message and customize scratch message.
+(setq inhibit-startup-message t
+      initial-scratch-message ";; Happy Hacking\n")
+
 ;; A simple package manager for Emacs, and a repository of pre-packed Emacs Lisp code.
 ;;   https://www.emacswiki.org/emacs/ELPA
 ;;
