@@ -12,6 +12,10 @@
 (dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode horizontal-scroll-bar-mode))
   (when (fboundp mode) (funcall mode -1)))
 
+;; GNU/Linux or macOS?
+(defconst IS-GNULINUX (eq system-type 'gnu/linux))
+(defconst IS-MACOS (eq system-type 'darwin))
+
 ;; A simple package manager for Emacs, and a repository of pre-packed Emacs Lisp code.
 ;;   https://www.emacswiki.org/emacs/ELPA
 ;;
@@ -49,11 +53,6 @@
 ;;   https://www.emacswiki.org/emacs/SetFonts
 (set-face-attribute 'default nil
                     :family "InconsolataGo Nerd Font" :height 140)
-
-
-;; GNU/Linux or macOS?
-(defconst IS-GNULINUX (eq system-type 'gnu/linux))
-(defconst IS-MACOS (eq system-type 'darwin))
 
 ;; Zenburn theme
 ;;   https://github.com/bbatsov/zenburn-emacs
