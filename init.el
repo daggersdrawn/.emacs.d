@@ -115,3 +115,7 @@
 (eval-after-load "ispell"
   '(when (executable-find ispell-program-name)
      (add-hook 'text-mode-hook 'turn-on-flyspell)))
+
+;; Automatically rescan the Imenu facility.
+;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Imenu.html
+(setq-default imenu-auto-rescan t)
