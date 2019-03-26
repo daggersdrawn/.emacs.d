@@ -123,3 +123,7 @@
 ;; Automatically rescan the Imenu facility.
 ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Imenu.html
 (setq-default imenu-auto-rescan t)
+
+;; Some users want to always use `y-or-n-p', never `yes-or-no-p'.
+;;   https://www.emacswiki.org/emacs/YesOrNoP
+(defalias 'yes-or-no-p 'y-or-n-p)
