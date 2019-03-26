@@ -81,6 +81,10 @@
   (mouse-wheel-mode t)  ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Mouse-Commands.html
   (blink-cursor-mode -1))  ;; https://www.emacswiki.org/emacs/NonBlinkingCursor
 
+;; Turn off alarms completely.
+;;   https://www.emacswiki.org/emacs/AlarmBell
+(setq ring-bell-function 'ignore)
+
 ;; Column and line numbers
 ;;   https://www.gnu.org/software/emacs/manual/html_node/efaq/Displaying-the-current-line-or-column.html
 (setq-default column-number-mode t)
