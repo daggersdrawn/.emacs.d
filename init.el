@@ -22,10 +22,12 @@
 ;; MELPA (Milkypostman’s Emacs Lisp Package Archive)
 ;; The largest and most up-to-date repository of Emacs packages.
 ;;   https://github.com/melpa/melpa
+;;
+;; Disable automatic package loading at startup.
+;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Package-Installation.html
 (require 'package)
 (setq package-enable-at-startup nil)
-(add-to-list 'package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-				 ("melpa" . "http://melpa.org/packages/")))
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
 
 ;; Isolate package configuration in a performance-oriented and tidy way.
