@@ -167,6 +167,29 @@
 (global-set-key (kbd "C-x C-c") 'ask-before-closing)
 (global-set-key (kbd "C-z") 'ask-before-closing)
 
+(defun nuke ()
+  "Kill all buffers, leaving *scratch* only."
+  (interactive)
+  (mapcar (lambda (x) (kill-buffer x)) (buffer-list))
+  (delete-other-windows)
+  (recentf-nuke))
+
+(defun recentf-nuke ()
+  "Remove all files from `recentf-list'."
+  (interactive)
+  (let ((count (length recentf-list)))
+    (setq recentf-list
+          (delq nil
+                (mapcar (function
+                         (lambda (filename)))
+                        recentf-list)))
+    (setq count (- count (length recentf-list)))
+    (message "%s removed from the list"
+             (cond ((= count 0) "No file")
+                   ((= count 1) "One file")
+                   (t (format "%d files" count)))))
+  (setq recentf-update-menu-p t))
+
 ;; Follow symlinks and do not ask.
 ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/General-VC-Options.html
 (setq vc-follow-symlinks t)
