@@ -140,6 +140,10 @@
 ;;   https://www.emacswiki.org/emacs/YesOrNoP
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+;; Enable dead keys.
+;;   https://www.emacswiki.org/emacs/DeadKeys
+(require 'iso-transl)
+
 ;; Prompt before quit.
 (defun ask-before-closing ()
   (interactive)
