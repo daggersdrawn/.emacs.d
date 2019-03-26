@@ -199,3 +199,9 @@
 ;; Automatically reverts the current buffer when its visited file changes on disk.
 ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Reverting.html
 (global-auto-revert-mode 1)
+
+;; An interactive tail mode that allows you to filter the tail with unix pipes and highlight
+;; the contents of the tailed file. Works locally or on remote files using tramp.
+;;   https://github.com/re5et/itail
+(use-package itail
+  :ensure t)
