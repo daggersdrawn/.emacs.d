@@ -54,6 +54,10 @@
 (set-face-attribute 'default nil
                     :family "InconsolataGo Nerd Font" :height 140)
 
+;; Seed the random-number generator.
+;;   https://www.gnu.org/software/emacs/manual/html_node/elisp/Random-Numbers.html
+(random t)
+
 (when IS-MACOS
   ;; Set up Emacs as an edit server, so that it "listens" for external edit requests and acts accordingly.
   ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html
