@@ -57,7 +57,10 @@
 (when IS-MACOS
   ;; Set up Emacs as an edit server, so that it "listens" for external edit requests and acts accordingly.
   ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html
-  (server-start))
+  (server-start)
+
+   ;; Do not make new frames when opening a new file with Emacs.
+  (setq ns-pop-up-frames nil))
 
 ;; Zenburn theme
 ;;   https://github.com/bbatsov/zenburn-emacs
