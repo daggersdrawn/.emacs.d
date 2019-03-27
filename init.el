@@ -114,9 +114,6 @@
 (setq-default show-trailing-whitespace t)  ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Useless-Whitespace.html
 (add-hook 'before-save-hook 'delete-trailing-whitespace)  ;; https://www.emacswiki.org/emacs/DeletingWhitespace
 
-;; Indicate empty lines in the fringe.
-(setq-default indicate-empty-lines t) ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Fringe-Indicators.html
-
 ;; Highlight current line
 ;;   https://www.emacswiki.org/emacs/HighlightCurrentLine
 (global-hl-line-mode 1)
