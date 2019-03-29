@@ -85,7 +85,7 @@
   ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html
   (server-start)
 
-   ;; Do not make new frames when opening a new file with Emacs.
+  ;; Do not make new frames when opening a new file with Emacs.
   (setq ns-pop-up-frames nil)
 
   ;; Configuring fullscreen mode.
