@@ -334,3 +334,28 @@
   (setq web-mode-code-indent-offset 2)
   (setq web-mode-attr-indent-offset 2)
   (setq web-mode-markup-indent-offset 2))
+
+;; REST client tool for exploring and testing HTTP REST webservices.
+;;   https://github.com/pashky/restclient.el
+(use-package restclient
+  :ensure t
+  :defer 5
+  :config (add-hook 'restclient-mode-hook 'company-restclient))
+
+;; Company-mode completion back-end for restclient-mode.
+;;   https://github.com/iquiw/company-restclient
+(use-package company-restclient
+  :ensure t
+  :config
+  (progn
+    (add-hook 'restclient-mode-hook
+		      (lambda ()
+		        (set (make-local-variable 'company-backends)'(company-restclient))
+		        (company-mode t)))))
+
+;; An org-mode extension to restclient.el
+;;   https://github.com/alf/ob-restclient.el
+(use-package ob-restclient
+  :ensure t
+  :config
+  (org-babel-do-load-languages 'org-babel-load-languages '((restclient . t))))
