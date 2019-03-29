@@ -228,3 +228,24 @@
 ;;   https://github.com/re5et/itail
 (use-package itail
   :ensure t)
+
+;; Company is a modular in-buffer text completion framework for Emacs.
+;;   https://company-mode.github.io/
+(use-package company
+  :ensure t
+  :config
+  (progn
+    (setq company-idle-delay 0.2
+	      company-tooltip-limit 20
+	      company-minimum-prefix-length 2
+	      company-echo-delay 0
+	      company-dabbrev-downcase nil)
+    (add-hook 'after-init-hook 'global-company-mode)
+
+    (eval-after-load 'company
+	  `(let (( Map  company-active-map))
+	     (define-key company-active-map (kbd "\C-n") 'company-select-next)
+	     (define-key company-active-map (kbd "\C-n") 'company-select-next)
+	     (define-key company-active-map (kbd "\C-p") 'company-select-previous)
+	     (define-key company-active-map (kbd "\C-d") 'company-show-doc-buffer)
+	     (define-key company-active-map (kbd "<tab>") 'company-complete)))))
