@@ -249,3 +249,10 @@
 	     (define-key company-active-map (kbd "\C-p") 'company-select-previous)
 	     (define-key company-active-map (kbd "\C-d") 'company-show-doc-buffer)
 	     (define-key company-active-map (kbd "<tab>") 'company-complete)))))
+
+;; Markdown Mode is a major mode for editing Markdown-formatted text.
+;;   https://jblevins.org/projects/markdown-mode/
+(use-package markdown-mode
+  :ensure t
+  :mode (("\\.markdown\\'" . markdown-mode)
+	     ("\\.md\\'"       . markdown-mode)))
