@@ -30,9 +30,14 @@
 ;; Disable automatic package loading at startup.
 ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Package-Installation.html
 (require 'package)
-(setq package-enable-at-startup nil)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
+(add-to-list 'package-archives
+	       '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(add-to-list 'package-archives
+	       '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives
+	       '("gnu" . "http://elpa.gnu.org/packages/"))
+(add-to-list 'package-archives
+	       '("org" . "https://orgmode.org/elpa/") t)
 (package-initialize)
 
 ;; Isolate package configuration in a performance-oriented and tidy way.
