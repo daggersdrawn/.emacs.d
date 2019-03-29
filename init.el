@@ -187,6 +187,12 @@
 ;;   https://www.emacswiki.org/emacs/DeleteSelectionMode
 (delete-selection-mode t)
 
+ ;; Make identical buffer names unique.
+ (setq uniquify-buffer-name-style 'reverse
+	uniquify-separator "|"
+	uniquify-after-kill-buffer-p t
+	uniquify-ignore-buffers-re "^\\*")
+
 ;; Improve the standard text representation of various identifiers/symbols.
 (global-prettify-symbols-mode 1)
 (setq prettify-symbols-alist
