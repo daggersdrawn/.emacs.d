@@ -32,6 +32,7 @@
 (require 'package)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 (package-initialize)
 
 ;; Isolate package configuration in a performance-oriented and tidy way.
@@ -235,6 +236,19 @@
 ;;   https://github.com/re5et/itail
 (use-package itail
   :ensure t)
+
+;; Org mode, your life in plain text.
+;;   https://orgmode.org/
+(use-package org
+  :pin org
+  :ensure org-plus-contrib
+  :config (setq
+           org-src-fontify-natively t
+           org-src-tab-acts-natively t
+           org-todo-keywords '((sequence "BACKLOG(b)" "TODO(t)" "DOING(n)" "|" "DONE(d)")
+                               (sequence "|"  "ONHOLD(h)" "CANCELED(c)"))
+           ;; org-agenda-files '("~/.org/agenda.org")
+           ))
 
 ;; Company is a modular in-buffer text completion framework for Emacs.
 ;;   https://company-mode.github.io/
