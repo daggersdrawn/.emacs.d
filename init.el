@@ -48,10 +48,12 @@
   (exec-path-from-shell-initialize))
 
 ;; Benchmark Emacs Startup time without ever leaving your Emacs.
+;;   https://github.com/jschaf/esup
 (use-package esup
   :ensure t)
 
 ;; Paradox: A modern Emacs package menu.
+;;   https://github.com/Malabarba/paradox
 (use-package paradox
   :ensure t
   :config
