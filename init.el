@@ -79,6 +79,14 @@
 (set-face-attribute 'default nil
                     :family "InconsolataGo Nerd Font" :height 140)
 
+;; Easily adjust the font size in all Emacs frames.
+;;   https://github.com/purcell/default-text-scale
+(use-package default-text-scale
+  :ensure t
+  :config
+  (global-set-key (kbd "C-M-=") 'default-text-scale-increase)
+  (global-set-key (kbd "C-M--") 'default-text-scale-decrease))
+
 ;; Seed the random-number generator.
 ;;   https://www.gnu.org/software/emacs/manual/html_node/elisp/Random-Numbers.html
 (random t)
