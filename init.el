@@ -51,6 +51,12 @@
 (use-package esup
   :ensure t)
 
+;; Paradox: A modern Emacs package menu.
+(use-package paradox
+  :ensure t
+  :config
+  (setq paradox-github-token (exec-path-from-shell-copy-env "PARADOX_GITHUB_TOKEN")))
+
 ;; Keep ~/.emacs.d/ clean from auto-generated configuration and persistent data.
 ;;   https://github.com/emacscollective/no-littering
 (use-package no-littering
