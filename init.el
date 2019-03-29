@@ -143,6 +143,13 @@
   '(when (executable-find ispell-program-name)
      (add-hook 'text-mode-hook 'turn-on-flyspell)))
 
+;; An extensible thesaurus mode for emacs.
+;;   https://github.com/hpdeifel/synosaurus
+;; Install wordnet for a local lexical database:
+;;    https://wordnet.princeton.edu
+(use-package synosaurus
+  :ensure t)
+
 ;; Set cursor color.
 ;;   https://www.gnu.org/software/emacs/manual/html_node/eintr/X11-Colors.html
 (set-cursor-color "#f0dfaf")
