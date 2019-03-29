@@ -239,6 +239,15 @@
 ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Reverting.html
 (global-auto-revert-mode 1)
 
+;; Which Key displays available keybindings in a popup.
+;;   https://github.com/justbur/emacs-which-key
+(use-package which-key
+  :ensure t
+  :init
+  (setq which-key-separator " ")
+  (setq which-key-prefix-prefix "+")
+  :config (which-key-mode))
+
 ;; An interactive tail mode that allows you to filter the tail with unix pipes and highlight
 ;; the contents of the tailed file. Works locally or on remote files using tramp.
 ;;   https://github.com/re5et/itail
