@@ -289,3 +289,34 @@
   :ensure t
   :config
   (setq json-reformat:indent-width 2))
+
+;; Magit: a git porcelain inside emacs.
+;;   https://magit.vc
+(use-package magit
+  :ensure t
+  :commands (magit-status)
+  :bind ("C-x g" . magit-status))
+
+;; GitTimemachine: step through historic versions of git controlled files.
+;;   https://gitlab.com/pidu/git-timemachine
+(use-package git-timemachine
+  :ensure t)
+
+;; Git gutter
+;;   https://github.com/syohex/emacs-git-gutter
+;;
+;; Fringe version of git-gutter.el
+;;   https://github.com/syohex/emacs-git-gutter-fringe
+;;
+;; git-gutter.el does not work with linum-mode but
+;; git-gutter-fringe.el can work with linum-mode.
+;;
+;; In contrast, git-gutter-fringe.el does not work in tty frame(emacs
+;; -nw), but git-gutter.el can work in tty frame.
+(if (display-graphic-p)
+    (use-package git-gutter-fringe
+	  :ensure t
+	  :init (global-git-gutter-mode))
+  (use-package git-gutter
+    :ensure t
+    :init (global-git-gutter-mode)))
