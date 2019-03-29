@@ -256,3 +256,15 @@
   :ensure t
   :mode (("\\.markdown\\'" . markdown-mode)
 	     ("\\.md\\'"       . markdown-mode)))
+
+;; JSON Mode is a major mode for editing JSON files.
+;;   https://github.com/joshwnj/json-mode
+(use-package json-mode
+  :ensure t)
+
+;; Reformat tool for JSON
+;;   https://github.com/gongo/json-reformat#configuration
+(use-package json-reformat
+  :ensure t
+  :config
+  (setq json-reformat:indent-width 2))
