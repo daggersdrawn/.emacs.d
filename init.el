@@ -400,3 +400,13 @@
 ;;   https://github.com/redguardtoo/js-comint
 (use-package js-comint
   :ensure t)
+
+;; Format JavaScript using prettier.
+;;   https://github.com/prettier/prettier-emacs
+(use-package prettier-js
+  :ensure t
+  :config
+  (add-hook 'web-mode-hook 'prettier-js-mode)
+  (add-hook 'rjsx-mode-hook 'prettier-js-mode)
+  (add-hook 'js-mode-hook 'prettier-js-mode)
+  (add-hook 'js2-mode-hook 'prettier-js-mode))
