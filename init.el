@@ -363,6 +363,14 @@
   (setq web-mode-attr-indent-offset 2)
   (setq web-mode-markup-indent-offset 2))
 
+;; Emmet is a web-developer’s toolkit for improving HTML & CSS workflow.
+;;   https://github.com/smihica/emmet-mode
+;;   https://docs.emmet.io/cheat-sheet/
+(use-package emmet-mode
+  :ensure t
+  :init
+  (add-hook 'web-mode-hook 'emmet-mode))
+
 ;; REST client tool for exploring and testing HTTP REST webservices.
 ;;   https://github.com/pashky/restclient.el
 (use-package restclient
