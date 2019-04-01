@@ -325,6 +325,12 @@
   :commands (magit-status)
   :bind ("C-x g" . magit-status))
 
+;; Forge allows you to work with Git forges, such as Github and Gitlab.
+;;   https://magit.vc/manual/forge/
+(use-package forge
+  :ensure t
+  :after magit)
+
 ;; GitTimemachine: step through historic versions of git controlled files.
 ;;   https://gitlab.com/pidu/git-timemachine
 (use-package git-timemachine
