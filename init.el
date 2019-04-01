@@ -395,3 +395,8 @@
   :ensure t
   :config
   (org-babel-do-load-languages 'org-babel-load-languages '((restclient . t))))
+
+;; Run a JavaScript interpreter in an inferior process window.
+;;   https://github.com/redguardtoo/js-comint
+(use-package js-comint
+  :ensure t)
