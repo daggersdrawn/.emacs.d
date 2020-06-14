@@ -144,6 +144,18 @@
 (setq-default show-trailing-whitespace t)  ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Useless-Whitespace.html
 (add-hook 'before-save-hook 'delete-trailing-whitespace)  ;; https://www.emacswiki.org/emacs/DeletingWhitespace
 
+;; Configure whitespace mode
+(use-package whitespace
+  :ensure t
+  :bind ("\C-c w" . whitespace-mode)
+  :config
+
+  (setq whitespace-action '(auto-cleanup))
+  (setq whitespace-line-column 80)
+  (setq whitespace-style '(empty tabs lines-tail trailing))
+  (setq whitespace-style '(face trailing empty indentation space-after-tab space-before-tab))
+  (whitespace-mode t))
+
 ;; Highlight current line
 ;;   https://www.emacswiki.org/emacs/HighlightCurrentLine
 (global-hl-line-mode 1)
