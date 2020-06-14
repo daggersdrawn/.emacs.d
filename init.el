@@ -131,6 +131,10 @@
 ;;   https://www.emacswiki.org/emacs/IndentationBasics
 (setq-default indent-tabs-mode nil
               tab-width 4)
+(add-hook 'html-mode-hook
+      '(lambda()
+        (setq c-basic-offset 4)
+        (setq indent-tabs-mode nil)))
 
 ;; Require final newlines.
 ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Customize-Save.html
