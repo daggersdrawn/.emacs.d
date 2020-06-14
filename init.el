@@ -432,3 +432,36 @@
   (add-hook 'rjsx-mode-hook 'prettier-js-mode)
   (add-hook 'js-mode-hook 'prettier-js-mode)
   (add-hook 'js2-mode-hook 'prettier-js-mode))
+
+;;;;;;;;;
+;; PYTHON
+(use-package elpy
+  :ensure t)
+(elpy-enable)
+
+(use-package py-autopep8
+  :ensure t)
+(add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
+(setq py-autopep8-options '("--max-line-length=100"))
+
+(use-package ansible
+  :ensure t
+  :config
+  (use-package ansible-doc
+    :ensure t
+    :init
+    (add-hook 'yaml-mode-hook 'ansible-doc-mode))
+  (use-package ansible-vault
+    :ensure t
+    :init
+    (add-hook 'yaml-mode-hook 'ansible-vault-mode-maybe)))
+
+
+;; gnutls https://www.reddit.com/r/emacs/comments/8sykl1/emacs_tls_defaults_are_downright_dangerous/e13r9ai/
+;; this validates the cert, I have no idea why it's nil by default
+(setq gnutls-verify-error t)
+;; probably too high for general usage,
+;; but have no effect in the tests regardless
+(setq gnutls-min-prime-bits 2048)
+(setq network-security-level 'high)
+(setq nsm-save-host-names t)
