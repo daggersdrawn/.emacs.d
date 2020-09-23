@@ -254,21 +254,20 @@
 ;; Which Key displays available keybindings in a popup.
 ;;   https://github.com/justbur/emacs-which-key
 (use-package which-key
-  :init
-  (setq which-key-separator " ")
-  (setq which-key-prefix-prefix "+")
+  :init (setq which-key-separator " ")
+        (setq which-key-prefix-prefix "+")
   :config (which-key-mode))
 
 ;; A better solution for incremental narrowing in Emacs.
 ;;   https://github.com/raxod502/selectrum
-(use-package selectrum)
-(selectrum-mode +1)
+(use-package selectrum
+  :init (selectrum-mode +1))
 
 ;; Simple but effective sorting and filtering for Emacs.
 ;;   https://github.com/raxod502/prescient.el
-(use-package selectrum-prescient)
-(selectrum-prescient-mode +1)
-(prescient-persist-mode +1)
+(use-package selectrum-prescient
+  :init (selectrum-prescient-mode +1)
+        (prescient-persist-mode +1))
 
 ;; An interactive tail mode that allows you to filter the tail with unix pipes and highlight
 ;; the contents of the tailed file. Works locally or on remote files using tramp.
@@ -289,8 +288,11 @@
 ;; Markdown Mode is a major mode for editing Markdown-formatted text.
 ;;   https://jblevins.org/projects/markdown-mode/
 (use-package markdown-mode
-  :mode (("\\.markdown\\'" . markdown-mode)
-	     ("\\.md\\'"       . markdown-mode)))
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
 
 ;; JSON Mode is a major mode for editing JSON files.
 ;;   https://github.com/joshwnj/json-mode
@@ -329,8 +331,8 @@
 ;; In contrast, git-gutter-fringe.el does not work in tty frame(emacs
 ;; -nw), but git-gutter.el can work in tty frame.
 (if (display-graphic-p)
-    (use-package git-gutter-fringe
-	  :init (global-git-gutter-mode))
+  (use-package git-gutter-fringe
+    :init (global-git-gutter-mode))
   (use-package git-gutter
     :init (global-git-gutter-mode)))
 
@@ -351,8 +353,7 @@
 ;;   https://github.com/smihica/emmet-mode
 ;;   https://docs.emmet.io/cheat-sheet/
 (use-package emmet-mode
-  :init
-  (add-hook 'web-mode-hook 'emmet-mode))
+  :init (add-hook 'web-mode-hook 'emmet-mode))
 
 ;; Run a JavaScript interpreter in an inferior process window.
 ;;   https://github.com/redguardtoo/js-comint
@@ -379,11 +380,9 @@
 (use-package ansible
   :config
   (use-package ansible-doc
-    :init
-    (add-hook 'yaml-mode-hook 'ansible-doc-mode))
+    :init (add-hook 'yaml-mode-hook 'ansible-doc-mode))
   (use-package ansible-vault
-    :init
-    (add-hook 'yaml-mode-hook 'ansible-vault-mode-maybe)))
+    :init (add-hook 'yaml-mode-hook 'ansible-vault-mode-maybe)))
 
 
 ;; gnutls https://www.reddit.com/r/emacs/comments/8sykl1/emacs_tls_defaults_are_downright_dangerous/e13r9ai/
