@@ -301,8 +301,7 @@
 ;; Reformat tool for JSON
 ;;   https://github.com/gongo/json-reformat#configuration
 (use-package json-reformat
-  :config
-  (setq json-reformat:indent-width 2))
+  :config (setq json-reformat:indent-width 2))
 
 ;; Magit: a git porcelain inside emacs.
 ;;   https://magit.vc
