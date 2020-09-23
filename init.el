@@ -35,8 +35,15 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+;; Effectively replace use-package with straight-use-package
+;;   https://github.com/raxod502/straight.el/blob/develop/README.md#integration-with-use-package
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
+
+;; Include melpa in package-list-packages
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/"))
 
 ;; Ensure environment variables inside Emacs look the same as in the user's shell.
 ;;   https://github.com/purcell/exec-path-from-shell
