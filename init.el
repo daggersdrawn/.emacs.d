@@ -259,6 +259,17 @@
   (setq which-key-prefix-prefix "+")
   :config (which-key-mode))
 
+;; A better solution for incremental narrowing in Emacs.
+;;   https://github.com/raxod502/selectrum
+(use-package selectrum)
+(selectrum-mode +1)
+
+;; Simple but effective sorting and filtering for Emacs.
+;;   https://github.com/raxod502/prescient.el
+(use-package selectrum-prescient)
+(selectrum-prescient-mode +1)
+(prescient-persist-mode +1)
+
 ;; An interactive tail mode that allows you to filter the tail with unix pipes and highlight
 ;; the contents of the tailed file. Works locally or on remote files using tramp.
 ;;   https://github.com/re5et/itail
@@ -274,26 +285,6 @@
                                (sequence "|"  "ONHOLD(h)" "CANCELED(c)"))
            ;; org-agenda-files '("~/.org/agenda.org")
            ))
-
-;; Company is a modular in-buffer text completion framework for Emacs.
-;;   https://company-mode.github.io/
-(use-package company
-  :config
-  (progn
-    (setq company-idle-delay 0.2
-	      company-tooltip-limit 20
-	      company-minimum-prefix-length 2
-	      company-echo-delay 0
-	      company-dabbrev-downcase nil)
-    (add-hook 'after-init-hook 'global-company-mode)
-
-    (eval-after-load 'company
-	  `(let (( Map  company-active-map))
-	     (define-key company-active-map (kbd "\C-n") 'company-select-next)
-	     (define-key company-active-map (kbd "\C-n") 'company-select-next)
-	     (define-key company-active-map (kbd "\C-p") 'company-select-previous)
-	     (define-key company-active-map (kbd "\C-d") 'company-show-doc-buffer)
-	     (define-key company-active-map (kbd "<tab>") 'company-complete)))))
 
 ;; Markdown Mode is a major mode for editing Markdown-formatted text.
 ;;   https://jblevins.org/projects/markdown-mode/
@@ -365,19 +356,7 @@
 
 ;; REST client tool for exploring and testing HTTP REST webservices.
 ;;   https://github.com/pashky/restclient.el
-(use-package restclient
-  :defer 5
-  :config (add-hook 'restclient-mode-hook 'company-restclient))
-
-;; Company-mode completion back-end for restclient-mode.
-;;   https://github.com/iquiw/company-restclient
-(use-package company-restclient
-  :config
-  (progn
-    (add-hook 'restclient-mode-hook
-		      (lambda ()
-		        (set (make-local-variable 'company-backends)'(company-restclient))
-		        (company-mode t)))))
+(use-package restclient)
 
 ;; An org-mode extension to restclient.el
 ;;   https://github.com/alf/ob-restclient.el
