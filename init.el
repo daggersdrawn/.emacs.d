@@ -48,12 +48,6 @@
 ;;   https://github.com/jschaf/esup
 (use-package esup)
 
-;; Paradox: A modern Emacs package menu.
-;;   https://github.com/Malabarba/paradox
-(use-package paradox
-  :config
-  (setq paradox-github-token (exec-path-from-shell-copy-env "PARADOX_GITHUB_TOKEN")))
-
 ;; Keep ~/.emacs.d/ clean from auto-generated configuration and persistent data.
 ;;   https://github.com/emacscollective/no-littering
 (use-package no-littering)
