@@ -289,9 +289,9 @@
 ;;   https://jblevins.org/projects/markdown-mode/
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
-  :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode))
+  :mode (("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode)
+         ("README\\.md\\'" . gfm-mode))
   :init (setq markdown-command "multimarkdown"))
 
 ;; JSON Mode is a major mode for editing JSON files.
