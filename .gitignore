@@ -3,7 +3,7 @@
 
 # Packaging
 .cask
-elpa/*
+straight/*
 
 # Backup files
 *~

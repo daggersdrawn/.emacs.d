@@ -20,63 +20,50 @@
 (setq inhibit-startup-message t
       initial-scratch-message ";; Happy Hacking\n")
 
-;; A simple package manager for Emacs, and a repository of pre-packed Emacs Lisp code.
-;;   https://www.emacswiki.org/emacs/ELPA
-;;
-;; MELPA (Milkypostman’s Emacs Lisp Package Archive)
-;; The largest and most up-to-date repository of Emacs packages.
-;;   https://github.com/melpa/melpa
-;;
-;; Disable automatic package loading at startup.
-;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Package-Installation.html
-(require 'package)
-(add-to-list 'package-archives
-	       '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-(add-to-list 'package-archives
-	       '("melpa" . "https://melpa.org/packages/") t)
-(add-to-list 'package-archives
-	       '("gnu" . "http://elpa.gnu.org/packages/"))
-(add-to-list 'package-archives
-	       '("org" . "https://orgmode.org/elpa/") t)
-(package-initialize)
+;; straight.el: next-generation, purely functional package manager for the Emacs hacker.
+;;   https://github.com/raxod502/straight.el
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-;; Isolate package configuration in a performance-oriented and tidy way.
-;;   https://github.com/jwiegley/use-package
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+(straight-use-package 'use-package)
+(setq straight-use-package-by-default t)
 
 ;; Ensure environment variables inside Emacs look the same as in the user's shell.
 ;;   https://github.com/purcell/exec-path-from-shell
-(use-package exec-path-from-shell
-  :ensure t)
+(use-package exec-path-from-shell)
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
 
 ;; Benchmark Emacs Startup time without ever leaving your Emacs.
 ;;   https://github.com/jschaf/esup
-(use-package esup
-  :ensure t)
+(use-package esup)
 
 ;; Paradox: A modern Emacs package menu.
 ;;   https://github.com/Malabarba/paradox
 (use-package paradox
-  :ensure t
   :config
   (setq paradox-github-token (exec-path-from-shell-copy-env "PARADOX_GITHUB_TOKEN")))
 
 ;; Keep ~/.emacs.d/ clean from auto-generated configuration and persistent data.
 ;;   https://github.com/emacscollective/no-littering
-(use-package no-littering
-  :ensure t)
+(use-package no-littering)
 (setq auto-save-file-name-transforms
       `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 (setq custom-file (no-littering-expand-etc-file-name "custom.el"))
 
 ;; Zenburn theme
 ;;   https://github.com/bbatsov/zenburn-emacs
-(use-package zenburn-theme
-  :ensure t)
+(use-package zenburn-theme)
 (load-theme 'zenburn t)
 
 ;; Globally set the default font.
@@ -87,7 +74,6 @@
 ;; Easily adjust the font size in all Emacs frames.
 ;;   https://github.com/purcell/default-text-scale
 (use-package default-text-scale
-  :ensure t
   :config
   (global-set-key (kbd "C-M-=") 'default-text-scale-increase)
   (global-set-key (kbd "C-M--") 'default-text-scale-decrease))
@@ -146,7 +132,6 @@
 
 ;; Configure whitespace mode
 (use-package whitespace
-  :ensure t
   :bind ("\C-c w" . whitespace-mode)
   :config
 
@@ -177,8 +162,7 @@
 ;;   https://github.com/hpdeifel/synosaurus
 ;; Install wordnet for a local lexical database:
 ;;    https://wordnet.princeton.edu
-(use-package synosaurus
-  :ensure t)
+(use-package synosaurus)
 
 ;; Set cursor color.
 ;;   https://www.gnu.org/software/emacs/manual/html_node/eintr/X11-Colors.html
@@ -269,7 +253,6 @@
 ;; Which Key displays available keybindings in a popup.
 ;;   https://github.com/justbur/emacs-which-key
 (use-package which-key
-  :ensure t
   :init
   (setq which-key-separator " ")
   (setq which-key-prefix-prefix "+")
@@ -278,14 +261,11 @@
 ;; An interactive tail mode that allows you to filter the tail with unix pipes and highlight
 ;; the contents of the tailed file. Works locally or on remote files using tramp.
 ;;   https://github.com/re5et/itail
-(use-package itail
-  :ensure t)
+(use-package itail)
 
 ;; Org mode, your life in plain text.
 ;;   https://orgmode.org/
 (use-package org
-  :pin org
-  :ensure org-plus-contrib
   :config (setq
            org-src-fontify-natively t
            org-src-tab-acts-natively t
@@ -297,7 +277,6 @@
 ;; Company is a modular in-buffer text completion framework for Emacs.
 ;;   https://company-mode.github.io/
 (use-package company
-  :ensure t
   :config
   (progn
     (setq company-idle-delay 0.2
@@ -318,39 +297,33 @@
 ;; Markdown Mode is a major mode for editing Markdown-formatted text.
 ;;   https://jblevins.org/projects/markdown-mode/
 (use-package markdown-mode
-  :ensure t
   :mode (("\\.markdown\\'" . markdown-mode)
 	     ("\\.md\\'"       . markdown-mode)))
 
 ;; JSON Mode is a major mode for editing JSON files.
 ;;   https://github.com/joshwnj/json-mode
-(use-package json-mode
-  :ensure t)
+(use-package json-mode)
 
 ;; Reformat tool for JSON
 ;;   https://github.com/gongo/json-reformat#configuration
 (use-package json-reformat
-  :ensure t
   :config
   (setq json-reformat:indent-width 2))
 
 ;; Magit: a git porcelain inside emacs.
 ;;   https://magit.vc
 (use-package magit
-  :ensure t
   :commands (magit-status)
   :bind ("C-x g" . magit-status))
 
 ;; Forge allows you to work with Git forges, such as Github and Gitlab.
 ;;   https://magit.vc/manual/forge/
 (use-package forge
-  :ensure t
   :after magit)
 
 ;; GitTimemachine: step through historic versions of git controlled files.
 ;;   https://gitlab.com/pidu/git-timemachine
-(use-package git-timemachine
-  :ensure t)
+(use-package git-timemachine)
 
 ;; Git gutter
 ;;   https://github.com/syohex/emacs-git-gutter
@@ -365,16 +338,13 @@
 ;; -nw), but git-gutter.el can work in tty frame.
 (if (display-graphic-p)
     (use-package git-gutter-fringe
-	  :ensure t
 	  :init (global-git-gutter-mode))
   (use-package git-gutter
-    :ensure t
     :init (global-git-gutter-mode)))
 
 ;; Web Mode is an autonomous emacs major-mode for editing web templates.
 ;;   https://web-mode.org
 (use-package web-mode
-  :ensure t
   :config
   (add-to-list 'auto-mode-alist '("\\.js[x]?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.mdx?\\'" . web-mode))
@@ -389,21 +359,18 @@
 ;;   https://github.com/smihica/emmet-mode
 ;;   https://docs.emmet.io/cheat-sheet/
 (use-package emmet-mode
-  :ensure t
   :init
   (add-hook 'web-mode-hook 'emmet-mode))
 
 ;; REST client tool for exploring and testing HTTP REST webservices.
 ;;   https://github.com/pashky/restclient.el
 (use-package restclient
-  :ensure t
   :defer 5
   :config (add-hook 'restclient-mode-hook 'company-restclient))
 
 ;; Company-mode completion back-end for restclient-mode.
 ;;   https://github.com/iquiw/company-restclient
 (use-package company-restclient
-  :ensure t
   :config
   (progn
     (add-hook 'restclient-mode-hook
@@ -414,19 +381,16 @@
 ;; An org-mode extension to restclient.el
 ;;   https://github.com/alf/ob-restclient.el
 (use-package ob-restclient
-  :ensure t
   :config
   (org-babel-do-load-languages 'org-babel-load-languages '((restclient . t))))
 
 ;; Run a JavaScript interpreter in an inferior process window.
 ;;   https://github.com/redguardtoo/js-comint
-(use-package js-comint
-  :ensure t)
+(use-package js-comint)
 
 ;; Format JavaScript using prettier.
 ;;   https://github.com/prettier/prettier-emacs
 (use-package prettier-js
-  :ensure t
   :config
   (add-hook 'web-mode-hook 'prettier-js-mode)
   (add-hook 'rjsx-mode-hook 'prettier-js-mode)
@@ -435,24 +399,19 @@
 
 ;;;;;;;;;
 ;; PYTHON
-(use-package elpy
-  :ensure t)
+(use-package elpy)
 (elpy-enable)
 
-(use-package py-autopep8
-  :ensure t)
+(use-package py-autopep8)
 (add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
 (setq py-autopep8-options '("--max-line-length=100"))
 
 (use-package ansible
-  :ensure t
   :config
   (use-package ansible-doc
-    :ensure t
     :init
     (add-hook 'yaml-mode-hook 'ansible-doc-mode))
   (use-package ansible-vault
-    :ensure t
     :init
     (add-hook 'yaml-mode-hook 'ansible-vault-mode-maybe)))
 
