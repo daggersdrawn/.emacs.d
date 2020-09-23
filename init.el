@@ -354,16 +354,6 @@
   :init
   (add-hook 'web-mode-hook 'emmet-mode))
 
-;; REST client tool for exploring and testing HTTP REST webservices.
-;;   https://github.com/pashky/restclient.el
-(use-package restclient)
-
-;; An org-mode extension to restclient.el
-;;   https://github.com/alf/ob-restclient.el
-(use-package ob-restclient
-  :config
-  (org-babel-do-load-languages 'org-babel-load-languages '((restclient . t))))
-
 ;; Run a JavaScript interpreter in an inferior process window.
 ;;   https://github.com/redguardtoo/js-comint
 (use-package js-comint)
