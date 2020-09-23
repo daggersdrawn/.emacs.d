@@ -382,13 +382,3 @@
     :init (add-hook 'yaml-mode-hook 'ansible-doc-mode))
   (use-package ansible-vault
     :init (add-hook 'yaml-mode-hook 'ansible-vault-mode-maybe)))
-
-
-;; gnutls https://www.reddit.com/r/emacs/comments/8sykl1/emacs_tls_defaults_are_downright_dangerous/e13r9ai/
-;; this validates the cert, I have no idea why it's nil by default
-(setq gnutls-verify-error t)
-;; probably too high for general usage,
-;; but have no effect in the tests regardless
-(setq gnutls-min-prime-bits 2048)
-(setq network-security-level 'high)
-(setq nsm-save-host-names t)
