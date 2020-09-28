@@ -63,6 +63,11 @@
       `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 (setq custom-file (no-littering-expand-etc-file-name "custom.el"))
 
+;; This package implements hiding or abbreviation of the mode line
+;; displays (lighters) of minor-modes.
+;;   https://github.com/emacsmirror/diminish
+(use-package diminish)
+
 ;; Zenburn theme
 ;;   https://github.com/bbatsov/zenburn-emacs
 (use-package zenburn-theme)
