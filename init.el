@@ -304,6 +304,19 @@
   :init (selectrum-prescient-mode +1)
         (prescient-persist-mode +1))
 
+;; Company
+(use-package company
+  :diminish company-mode
+  :init (global-company-mode +1))
+
+(add-hook 'company-mode-hook
+          '(lambda ()
+             (define-key company-active-map (kbd "C-n") 'company-select-next-or-abort)
+             (define-key company-active-map (kbd "C-p") 'company-select-previous-or-abort)))
+
+(use-package company-prescient)
+(company-prescient-mode +1)
+
 ;; An interactive tail mode that allows you to filter the tail with unix pipes and highlight
 ;; the contents of the tailed file. Works locally or on remote files using tramp.
 ;;   https://github.com/re5et/itail
