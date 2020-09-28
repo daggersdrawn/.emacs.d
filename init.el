@@ -351,6 +351,28 @@
 (use-package json-reformat
   :config (setq json-reformat:indent-width 2))
 
+;; Web templating mode for emacs.
+;;   https://github.com/fxbois/web-mode
+(use-package web-mode
+  :mode (("\\.jsx?\\'" . web-mode)
+         ("\\.tsx?\\'" . web-mode)
+         ("\\.html?\\'" . web-mode))
+  :hook
+  (web-mode .
+            (lambda ()
+              (if (equal web-mode-content-type "javascript")
+                  (web-mode-set-content-type "jsx")
+                (message "now set to: %s" web-mode-content-type))))
+  :config
+  (setq web-mode-enable-auto-closing t)
+  (setq web-mode-enable-auto-pairing t)
+  (setq web-mode-code-indent-offset 2)
+  (setq web-mode-markup-indent-offset 2))
+
+(use-package typescript-mode)
+
+(use-package yaml-mode)
+
 ;; Magit: a git porcelain inside emacs.
 ;;   https://magit.vc
 (use-package magit
@@ -381,48 +403,29 @@
   (use-package git-gutter-fringe
     :init (global-git-gutter-mode))
   (use-package git-gutter
+    :diminish git-gutter-mode
     :init (global-git-gutter-mode)))
 
-;; Web Mode is an autonomous emacs major-mode for editing web templates.
-;;   https://web-mode.org
-(use-package web-mode
+(use-package major-mode-hydra
+  :demand t
+  :bind ("M-SPC" . major-mode-hydra))
+
+(use-package eglot)
+
+(use-package eldoc
+  :diminish eldoc-mode
   :config
-  (add-to-list 'auto-mode-alist '("\\.js[x]?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.mdx?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+  (global-eldoc-mode 1))
 
-  (setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'")))
-  (setq web-mode-code-indent-offset 2)
-  (setq web-mode-attr-indent-offset 2)
-  (setq web-mode-markup-indent-offset 2))
+(use-package flycheck)
 
-;; Emmet is a web-developer’s toolkit for improving HTML & CSS workflow.
-;;   https://github.com/smihica/emmet-mode
-;;   https://docs.emmet.io/cheat-sheet/
-(use-package emmet-mode
-  :init (add-hook 'web-mode-hook 'emmet-mode))
+(use-package py-isort
+  :commands (py-isort-buffer py-isort-region))
 
-;; Run a JavaScript interpreter in an inferior process window.
-;;   https://github.com/redguardtoo/js-comint
-(use-package js-comint)
+(use-package blacken)
 
-;; Format JavaScript using prettier.
-;;   https://github.com/prettier/prettier-emacs
-(use-package prettier-js
-  :config
-  (add-hook 'web-mode-hook 'prettier-js-mode)
-  (add-hook 'rjsx-mode-hook 'prettier-js-mode)
-  (add-hook 'js-mode-hook 'prettier-js-mode)
-  (add-hook 'js2-mode-hook 'prettier-js-mode))
-
-;;;;;;;;;
-;; PYTHON
-(use-package elpy)
-(elpy-enable)
-
-(use-package py-autopep8)
-(add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
-(setq py-autopep8-options '("--max-line-length=100"))
+(use-package python-pytest
+  :bind (("C-c C-x t" . python-pytest-dispatch)))
 
 (use-package ansible
   :config
@@ -430,3 +433,34 @@
     :init (add-hook 'yaml-mode-hook 'ansible-doc-mode))
   (use-package ansible-vault
     :init (add-hook 'yaml-mode-hook 'ansible-vault-mode-maybe)))
+
+(use-package python-mode
+  :after (eglot)
+  :hook (python-mode . eglot-ensure)
+  :config
+  (setq eldoc-message-function #'eldoc-minibuffer-message)
+  :mode-hydra
+  ("Nav"
+   (("n" python-nav-forward-defun "next-defun" :exit nil)
+    ("p" python-nav-backward-defun "prev-defun" :exit nil))
+   "Errors"
+   (("<" flycheck-previous-error "prev" :exit nil)
+    (">" flycheck-next-error "next" :exit nil)
+    ("l" flycheck-list-errors "list"))
+   "Env"
+   (("a" pipenv-activate "pipenv-activate" :exit nil)
+    ("d" pipenv-deactivate "pipenv-deactivate" :exit nil)
+    ("w" pyvenv-workon "workon...")
+    ("s" run-python "pyshell"))
+   "Tools"
+   (("f" blacken-buffer "reformat")
+    ("i" py-isort-buffer "sort imports"))
+   "Test"
+   (("t" python-pytest-popup "pytest..."))))
+
+(use-package pipenv
+  :defer t
+  :diminish pipenv-mode
+  :hook (python-mode . pipenv-mode)
+  :init
+  (setq pipenv-keymap-prefix (kbd "C-c C-o")))
