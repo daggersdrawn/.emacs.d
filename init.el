@@ -23,6 +23,7 @@
 ;; straight.el: next-generation, purely functional package manager for the Emacs hacker.
 ;;   https://github.com/raxod502/straight.el
 (defvar bootstrap-version)
+(setq straight-fix-flycheck t)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
       (bootstrap-version 5))
