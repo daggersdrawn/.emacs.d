@@ -257,12 +257,41 @@
 ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Reverting.html
 (global-auto-revert-mode 1)
 
+;; Jump to things in Emacs tree-style.
+;;   https://github.com/abo-abo/avy
+(use-package avy
+  :bind (("M-g e" . avy-goto-word-0)))
+
+;; Multiple cursors for emacs.
+;;   https://github.com/magnars/multiple-cursors.el
+(use-package multiple-cursors)
+
+;; A template system for Emacs.
+;;   https://github.com/joaotavora/yasnippet
+(use-package yasnippet
+  :diminish yas-minor-mode
+  :config
+  (yas-global-mode 1)
+  (setq yas-snippet-dirs (append yas-snippet-dirs
+                                 '("~/.emacs.d/snippets"))))
+
 ;; Which Key displays available keybindings in a popup.
 ;;   https://github.com/justbur/emacs-which-key
 (use-package which-key
-  :init (setq which-key-separator " ")
-        (setq which-key-prefix-prefix "+")
-  :config (which-key-mode))
+  :diminish which-key-mode
+  :init
+  (setq which-key-separator " ")
+  (setq which-key-prefix-prefix "+")
+  :config
+  (which-key-add-key-based-replacements
+    "C-c &" "Yasnippet"
+    "C-c e" "Eglot"
+    "C-c a" "Avy"
+    "C-c a m" "Move"
+    "C-c a c" "Copy"
+    "C-c a k" "Kill"
+    "C-c m" "multiple cursors")
+  (which-key-mode 1))
 
 ;; A better solution for incremental narrowing in Emacs.
 ;;   https://github.com/raxod502/selectrum
