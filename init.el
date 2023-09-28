@@ -75,8 +75,7 @@
 
 ;; Globally set the default font.
 ;;   https://www.emacswiki.org/emacs/SetFonts
-(set-face-attribute 'default nil
-                    :family "InconsolataGo Nerd Font" :height 140)
+(set-face-attribute 'default nil :font "InconsolataGo Nerd Font-16")
 
 ;; Easily adjust the font size in all Emacs frames.
 ;;   https://github.com/purcell/default-text-scale
