@@ -3,8 +3,8 @@
 
 # Packaging
 .last-package-update-day
-straight/*
-elpa/*
+elpaca/*
+tree-sitter/*
 
 # Backup files
 *~
