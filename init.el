@@ -435,12 +435,16 @@
 
 ;; Activate tree-sitter major modes
 (setq major-mode-remap-alist
- '((yaml-mode . yaml-ts-mode)
-   (bash-mode . bash-ts-mode)
-   (js2-mode . js-ts-mode)
-   (typescript-mode . typescript-ts-mode)
-   (json-mode . json-ts-mode)
+ '((bash-mode . bash-ts-mode)
    (css-mode . css-ts-mode)
-   (python-mode . python-ts-mode)))
+   (go-mode . go-ts-mode)
+   (java-mode . java-ts-mode)
+   (js2-mode . js-ts-mode)
+   (json-mode . json-ts-mode)
+   (python-mode . python-ts-mode)
+   (ruby-mode . ruby-ts-mode)
+   (rust-mode . rust-ts-mode)
+   (typescript-mode . typescript-ts-mode)
+   (yaml-mode . yaml-ts-mode)))
 
 (server-start)
