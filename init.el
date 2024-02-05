@@ -132,7 +132,7 @@
 ;;   https://www.emacswiki.org/emacs/IndentationBasics
 (setq-default indent-tabs-mode nil
               tab-width 4)
-(add-hook 'html-mode-hook
+(add-hook 'html-ts-mode-hook
       '(lambda()
         (setq c-basic-offset 4)
         (setq indent-tabs-mode nil)))
@@ -433,33 +433,14 @@
   (use-package ansible-vault
     :init (add-hook 'yaml-mode-hook 'ansible-vault-mode-maybe)))
 
-(use-package python-mode
-  :after (eglot)
-  :hook (python-mode . eglot-ensure)
-  :config
-  (setq eldoc-message-function #'eldoc-minibuffer-message)
-  :mode-hydra
-  ("Nav"
-   (("n" python-nav-forward-defun "next-defun" :exit nil)
-    ("p" python-nav-backward-defun "prev-defun" :exit nil))
-   "Errors"
-   (("<" flycheck-previous-error "prev" :exit nil)
-    (">" flycheck-next-error "next" :exit nil)
-    ("l" flycheck-list-errors "list"))
-   "Env"
-   (("a" pipenv-activate "pipenv-activate" :exit nil)
-    ("d" pipenv-deactivate "pipenv-deactivate" :exit nil)
-    ("w" pyvenv-workon "workon...")
-    ("s" run-python "pyshell"))
-   "Tools"
-   (("f" blacken-buffer "reformat")
-    ("i" py-isort-buffer "sort imports"))
-   "Test"
-   (("t" python-pytest-popup "pytest..."))))
+;; Activate tree-sitter major modes
+(setq major-mode-remap-alist
+ '((yaml-mode . yaml-ts-mode)
+   (bash-mode . bash-ts-mode)
+   (js2-mode . js-ts-mode)
+   (typescript-mode . typescript-ts-mode)
+   (json-mode . json-ts-mode)
+   (css-mode . css-ts-mode)
+   (python-mode . python-ts-mode)))
 
-(use-package pipenv
-  :defer t
-  :diminish pipenv-mode
-  :hook (python-mode . pipenv-mode)
-  :init
-  (setq pipenv-keymap-prefix (kbd "C-c C-o")))
+(server-start)
