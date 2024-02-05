@@ -384,6 +384,15 @@
     (setq global-linum-mode nil)
     (global-git-gutter-mode +1)))
 
+;; Dashboard: An extensible emacs startup screen showing you what’s most important.
+;;   https://github.com/emacs-dashboard/emacs-dashboard
+(use-package dashboard
+  :elpaca t
+  :config
+  (add-hook 'elpaca-after-init-hook #'dashboard-insert-startupify-lists)
+  (add-hook 'elpaca-after-init-hook #'dashboard-initialize)
+  (dashboard-setup-startup-hook))
+
 (use-package major-mode-hydra
   :bind ("M-SPC" . major-mode-hydra))
 
