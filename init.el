@@ -389,21 +389,12 @@
 
 ;; Git gutter
 ;;   https://github.com/syohex/emacs-git-gutter
-;;
-;; Fringe version of git-gutter.el
-;;   https://github.com/syohex/emacs-git-gutter-fringe
-;;
-;; git-gutter.el does not work with linum-mode but
-;; git-gutter-fringe.el can work with linum-mode.
-;;
-;; In contrast, git-gutter-fringe.el does not work in tty frame(emacs
-;; -nw), but git-gutter.el can work in tty frame.
 (if (display-graphic-p)
-  (use-package git-gutter-fringe
-    :init (global-git-gutter-mode))
   (use-package git-gutter
     :diminish git-gutter-mode
-    :init (global-git-gutter-mode)))
+    :init
+    (setq global-linum-mode nil)
+    (global-git-gutter-mode +1)))
 
 (use-package major-mode-hydra
   :demand t
