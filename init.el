@@ -46,6 +46,15 @@
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/"))
 
+;; Automatically update Emacs packages.
+;;   https://github.com/rranelli/auto-package-update.el
+(use-package auto-package-update
+   :ensure t
+   :config
+   (setq auto-package-update-delete-old-versions t
+         auto-package-update-interval 4)
+   (auto-package-update-maybe))
+
 ;; Ensure environment variables inside Emacs look the same as in the user's shell.
 ;;   https://github.com/purcell/exec-path-from-shell
 (use-package exec-path-from-shell)
