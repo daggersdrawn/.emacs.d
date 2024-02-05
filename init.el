@@ -8,58 +8,73 @@
 ;; The Emacs Lisp Style Guide
 ;; https://github.com/bbatsov/emacs-lisp-style-guide
 
-;; Turn off mouse interface early in startup to avoid momentary display
-(dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode horizontal-scroll-bar-mode))
-  (when (fboundp mode) (funcall mode -1)))
+;; Disable startup message and customize scratch message.
+(setq inhibit-startup-message t
+      initial-scratch-message ";; Happy Hacking\n")
 
 ;; GNU/Linux or macOS?
 (defconst IS-GNULINUX (eq system-type 'gnu/linux))
 (defconst IS-MACOS (eq system-type 'darwin))
 
-;; Disable startup message and customize scratch message.
-(setq inhibit-startup-message t
-      initial-scratch-message ";; Happy Hacking\n")
+;; Turn off mouse interface early in startup to avoid momentary display
+(dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode horizontal-scroll-bar-mode))
+  (when (fboundp mode) (funcall mode -1)))
 
-;; straight.el: next-generation, purely functional package manager for the Emacs hacker.
-;;   https://github.com/raxod502/straight.el
-(defvar bootstrap-version)
-(setq straight-fix-flycheck t)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+;; Elpaca: An Elisp Package Manager
+;;   https://github.com/progfolio/elpaca
+(defvar elpaca-installer-version 0.6)
+(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
+(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
+(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
+(defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
+                              :ref nil
+                              :files (:defaults "elpaca-test.el" (:exclude "extensions"))
+                              :build (:not elpaca--activate-package)))
+(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
+       (build (expand-file-name "elpaca/" elpaca-builds-directory))
+       (order (cdr elpaca-order))
+       (default-directory repo))
+  (add-to-list 'load-path (if (file-exists-p build) build repo))
+  (unless (file-exists-p repo)
+    (make-directory repo t)
+    (when (< emacs-major-version 28) (require 'subr-x))
+    (condition-case-unless-debug err
+        (if-let ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
+                 ((zerop (call-process "git" nil buffer t "clone"
+                                       (plist-get order :repo) repo)))
+                 ((zerop (call-process "git" nil buffer t "checkout"
+                                       (or (plist-get order :ref) "--"))))
+                 (emacs (concat invocation-directory invocation-name))
+                 ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+                                       "--eval" "(byte-recompile-directory \".\" 0 'force)")))
+                 ((require 'elpaca))
+                 ((elpaca-generate-autoloads "elpaca" repo)))
+            (progn (message "%s" (buffer-string)) (kill-buffer buffer))
+          (error "%s" (with-current-buffer buffer (buffer-string))))
+      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
+  (unless (require 'elpaca-autoloads nil t)
+    (require 'elpaca)
+    (elpaca-generate-autoloads "elpaca" repo)
+    (load "./elpaca-autoloads")))
+(add-hook 'after-init-hook #'elpaca-process-queues)
+(elpaca `(,@elpaca-order))
 
-;; Effectively replace use-package with straight-use-package
-;;   https://github.com/raxod502/straight.el/blob/develop/README.md#integration-with-use-package
-(straight-use-package 'use-package)
-(setq straight-use-package-by-default t)
+;; Install use-package support
+(elpaca elpaca-use-package
+  ;; Enable :elpaca use-package keyword.
+  (elpaca-use-package-mode)
+  ;; Assume :elpaca t unless otherwise specified.
+  (setq elpaca-use-package-by-default t))
 
-;; Include melpa in package-list-packages
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
-
-;; Automatically update Emacs packages.
-;;   https://github.com/rranelli/auto-package-update.el
-(use-package auto-package-update
-   :ensure t
-   :config
-   (setq auto-package-update-delete-old-versions t
-         auto-package-update-interval 4)
-   (auto-package-update-maybe))
+;; Block until current queue processed.
+(elpaca-wait)
 
 ;; Ensure environment variables inside Emacs look the same as in the user's shell.
 ;;   https://github.com/purcell/exec-path-from-shell
-(use-package exec-path-from-shell)
-(when (memq window-system '(mac ns x))
-  (exec-path-from-shell-initialize))
+(use-package exec-path-from-shell
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
 
 ;; Benchmark Emacs Startup time without ever leaving your Emacs.
 ;;   https://github.com/jschaf/esup
@@ -67,10 +82,11 @@
 
 ;; Keep ~/.emacs.d/ clean from auto-generated configuration and persistent data.
 ;;   https://github.com/emacscollective/no-littering
-(use-package no-littering)
-(setq auto-save-file-name-transforms
-      `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
-(setq custom-file (no-littering-expand-etc-file-name "custom.el"))
+(use-package no-littering
+  :config
+  (setq auto-save-file-name-transforms
+        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+  (setq custom-file (no-littering-expand-etc-file-name "custom.el")))
 
 ;; This package implements hiding or abbreviation of the mode line
 ;; displays (lighters) of minor-modes.
@@ -79,8 +95,9 @@
 
 ;; Zenburn theme
 ;;   https://github.com/bbatsov/zenburn-emacs
-(use-package zenburn-theme)
-(load-theme 'zenburn t)
+(use-package zenburn-theme
+  :config
+  (load-theme 'zenburn t))
 
 ;; Globally set the default font.
 ;;   https://www.emacswiki.org/emacs/SetFonts
@@ -133,7 +150,7 @@
 (setq-default indent-tabs-mode nil
               tab-width 4)
 (add-hook 'html-ts-mode-hook
-      '(lambda()
+      #'(lambda ()
         (setq c-basic-offset 4)
         (setq indent-tabs-mode nil)))
 
@@ -147,9 +164,9 @@
 
 ;; Configure whitespace mode
 (use-package whitespace
+  :elpaca nil
   :bind ("\C-c w" . whitespace-mode)
   :config
-
   (setq whitespace-action '(auto-cleanup))
   (setq whitespace-line-column 80)
   (setq whitespace-style '(empty tabs lines-tail trailing))
@@ -215,13 +232,11 @@
 
 ;; Improve the standard text representation of various identifiers/symbols.
 (global-prettify-symbols-mode 1)
-(setq prettify-symbols-alist
-      '(
-        ("lambda" . ?λ)
-        ("->" . ?→)
-        ("=>" . ?⇒)
-        ("map" . ?↦)
-        ))
+(setq prettify-symbols-alist '(
+    ("lambda" . ?λ)
+    ("->" . ?→)
+    ("=>" . ?⇒)
+    ("map" . ?↦)))
 
 (defun ask-before-closing ()
   "Prompt before quit."
@@ -310,20 +325,20 @@
 ;;   https://github.com/raxod502/prescient.el
 (use-package selectrum-prescient
   :init (selectrum-prescient-mode +1)
-        (prescient-persist-mode +1))
+       (prescient-persist-mode +1))
 
 ;; Company
 (use-package company
-  :diminish company-mode
-  :init (global-company-mode +1))
+  :init (global-company-mode +1)
+  :config
+  (add-hook 'company-mode-hook
+            #'(lambda ()
+               (define-key company-active-map (kbd "C-n") 'company-select-next-or-abort)
+               (define-key company-active-map (kbd "C-p") 'company-select-previous-or-abort))))
 
-(add-hook 'company-mode-hook
-          '(lambda ()
-             (define-key company-active-map (kbd "C-n") 'company-select-next-or-abort)
-             (define-key company-active-map (kbd "C-p") 'company-select-previous-or-abort)))
-
-(use-package company-prescient)
-(company-prescient-mode +1)
+(use-package company-prescient
+  :config
+  (company-prescient-mode +1))
 
 ;; An interactive tail mode that allows you to filter the tail with unix pipes and highlight
 ;; the contents of the tailed file. Works locally or on remote files using tramp.
@@ -337,49 +352,13 @@
            org-src-fontify-natively t
            org-src-tab-acts-natively t
            org-todo-keywords '((sequence "BACKLOG(b)" "TODO(t)" "DOING(n)" "|" "DONE(d)")
-                               (sequence "|"  "ONHOLD(h)" "CANCELED(c)"))
-           ;; org-agenda-files '("~/.org/agenda.org")
-           ))
-
-;; Markdown Mode is a major mode for editing Markdown-formatted text.
-;;   https://jblevins.org/projects/markdown-mode/
-(use-package markdown-mode
-  :commands (markdown-mode gfm-mode)
-  :mode (("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode)
-         ("README\\.md\\'" . gfm-mode))
-  :init (setq markdown-command "multimarkdown"))
-
-;; JSON Mode is a major mode for editing JSON files.
-;;   https://github.com/joshwnj/json-mode
-(use-package json-mode)
+                               (sequence "|"  "WAITING(w)" "CANCELED(c)"))
+           org-agenda-files '("~/.org/agenda.org")))
 
 ;; Reformat tool for JSON
 ;;   https://github.com/gongo/json-reformat#configuration
 (use-package json-reformat
   :config (setq json-reformat:indent-width 2))
-
-;; Web templating mode for emacs.
-;;   https://github.com/fxbois/web-mode
-(use-package web-mode
-  :mode (("\\.jsx?\\'" . web-mode)
-         ("\\.tsx?\\'" . web-mode)
-         ("\\.html?\\'" . web-mode))
-  :hook
-  (web-mode .
-            (lambda ()
-              (if (equal web-mode-content-type "javascript")
-                  (web-mode-set-content-type "jsx")
-                (message "now set to: %s" web-mode-content-type))))
-  :config
-  (setq web-mode-enable-auto-closing t)
-  (setq web-mode-enable-auto-pairing t)
-  (setq web-mode-code-indent-offset 2)
-  (setq web-mode-markup-indent-offset 2))
-
-(use-package typescript-mode)
-
-(use-package yaml-mode)
 
 ;; Magit: a git porcelain inside emacs.
 ;;   https://magit.vc
@@ -406,22 +385,7 @@
     (global-git-gutter-mode +1)))
 
 (use-package major-mode-hydra
-  :demand t
   :bind ("M-SPC" . major-mode-hydra))
-
-(use-package eglot)
-
-(use-package eldoc
-  :diminish eldoc-mode
-  :config
-  (global-eldoc-mode 1))
-
-(use-package flycheck)
-
-(use-package py-isort
-  :commands (py-isort-buffer py-isort-region))
-
-(use-package blacken)
 
 (use-package python-pytest
   :bind (("C-c C-x t" . python-pytest-dispatch)))
@@ -433,18 +397,11 @@
   (use-package ansible-vault
     :init (add-hook 'yaml-mode-hook 'ansible-vault-mode-maybe)))
 
-;; Activate tree-sitter major modes
-(setq major-mode-remap-alist
- '((bash-mode . bash-ts-mode)
-   (css-mode . css-ts-mode)
-   (go-mode . go-ts-mode)
-   (java-mode . java-ts-mode)
-   (js2-mode . js-ts-mode)
-   (json-mode . json-ts-mode)
-   (python-mode . python-ts-mode)
-   (ruby-mode . ruby-ts-mode)
-   (rust-mode . rust-ts-mode)
-   (typescript-mode . typescript-ts-mode)
-   (yaml-mode . yaml-ts-mode)))
+(use-package treesit-auto
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
 
 (server-start)
