@@ -2,11 +2,13 @@
 *.elc
 
 # Packaging
-.cask
+.last-package-update-day
 straight/*
+elpa/*
 
 # Backup files
 *~
+var/*
 
 # Undo-tree save-files
 *.~undo-tree
