@@ -12,7 +12,7 @@
 (setq inhibit-startup-message t
       initial-scratch-message ";; Happy Hacking\n")
 
-;; GNU/Linux or macOS?
+;; GNU/Linux or MacOS?
 (defconst IS-GNULINUX (eq system-type 'gnu/linux))
 (defconst IS-MACOS (eq system-type 'darwin))
 
