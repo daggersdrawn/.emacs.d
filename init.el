@@ -20,6 +20,10 @@
 (dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode horizontal-scroll-bar-mode))
   (when (fboundp mode) (funcall mode -1)))
 
+;; Seed the random-number generator.
+;;   https://www.gnu.org/software/emacs/manual/html_node/elisp/Random-Numbers.html
+(random t)
+
 ;; Elpaca: An Elisp Package Manager
 ;;   https://github.com/progfolio/elpaca
 (defvar elpaca-installer-version 0.6)
@@ -58,82 +62,84 @@
     (load "./elpaca-autoloads")))
 (add-hook 'after-init-hook #'elpaca-process-queues)
 (elpaca `(,@elpaca-order))
-
 ;; Install use-package support
 (elpaca elpaca-use-package
-  ;; Enable :elpaca use-package keyword.
   (elpaca-use-package-mode)
-  ;; Assume :elpaca t unless otherwise specified.
   (setq elpaca-use-package-by-default t))
-
 ;; Block until current queue processed.
 (elpaca-wait)
 
-;; Ensure environment variables inside Emacs look the same as in the user's shell.
-;;   https://github.com/purcell/exec-path-from-shell
-(use-package exec-path-from-shell
-  :config
-  (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize)))
-
-;; Benchmark Emacs Startup time without ever leaving your Emacs.
-;;   https://github.com/jschaf/esup
-(use-package esup)
-
-;; Keep ~/.emacs.d/ clean from auto-generated configuration and persistent data.
-;;   https://github.com/emacscollective/no-littering
-(use-package no-littering
-  :config
-  (setq auto-save-file-name-transforms
-        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
-  (setq custom-file (no-littering-expand-etc-file-name "custom.el")))
-
-;; This package implements hiding or abbreviation of the mode line
-;; displays (lighters) of minor-modes.
+;; Diminish: Implement hiding or abbreviation of the mode line displays of minor-modes.
 ;;   https://github.com/emacsmirror/diminish
-(use-package diminish)
+(use-package diminish
+  :config (diminish 'eldoc-mode))
 
-;; Zenburn theme
+;; Zenburn-theme: The Zenburn color theme.
 ;;   https://github.com/bbatsov/zenburn-emacs
 (use-package zenburn-theme
-  :config
-  (load-theme 'zenburn t))
+  :config (load-theme 'zenburn t))
 
 ;; Globally set the default font.
 ;;   https://www.emacswiki.org/emacs/SetFonts
 (set-face-attribute 'default nil :font "InconsolataGo Nerd Font-16")
 
-;; Easily adjust the font size in all Emacs frames.
+;; Default-text-scale: Easily adjust the font size in all Emacs frames.
 ;;   https://github.com/purcell/default-text-scale
 (use-package default-text-scale
+  :bind
+  ("C-M-=" . default-text-scale-increase)
+  ("C-M--" . default-text-scale-decrease))
+
+;; Esup: Benchmark Emacs Startup time without ever leaving your Emacs.
+;;   https://github.com/jschaf/esup
+(use-package esup)
+
+;; Set cursor color.
+;;   https://www.gnu.org/software/emacs/manual/html_node/eintr/X11-Colors.html
+(set-cursor-color "#f0dfaf")
+
+;; If the cursor gets too close to the pointer, displace the pointer by a random distance and direction.
+;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Mouse-Avoidance.html
+(mouse-avoidance-mode 'jump)
+
+;; Keep cursor in same relative row and column during PgUP/DN.
+;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Scrolling.html
+(setq scroll-preserve-screen-position t)
+
+;; No-littering: Keep ~/.emacs.d/ clean from auto-generated configuration and persistent data.
+;;   https://github.com/emacscollective/no-littering
+(use-package no-littering
   :config
-  (global-set-key (kbd "C-M-=") 'default-text-scale-increase)
-  (global-set-key (kbd "C-M--") 'default-text-scale-decrease))
-
-;; Seed the random-number generator.
-;;   https://www.gnu.org/software/emacs/manual/html_node/elisp/Random-Numbers.html
-(random t)
-
-(when IS-MACOS
-  ;; Set up Emacs as an edit server, so that it "listens" for external edit requests and acts accordingly.
-  ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html
-  (server-start)
-
-  ;; Do not make new frames when opening a new file with Emacs.
-  (setq ns-pop-up-frames nil)
-
-  ;; Configuring fullscreen mode.
-  ;;   https://www.emacswiki.org/emacs/FullScreen
-  (custom-set-variables
-   '(initial-frame-alist (quote ((fullscreen . maximized))))))
+  (setq auto-save-file-name-transforms
+        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+  (setq custom-file (no-littering-expand-etc-file-name "custom.el"))
+  (setq make-backup-files nil))
 
 ;; When emacs is running in a window system and not in a character based-terminal.
 ;;   https://www.gnu.org/software/emacs/manual/html_node/elisp/Window-Systems.html
 (when window-system
-  (setq frame-title-format '(buffer-file-name "%f" ("%b")))  ;; https://www.emacswiki.org/emacs/FrameTitle
-  (tooltip-mode -1)  ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Tooltips.htmlm
-  (mouse-wheel-mode t)  ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Mouse-Commands.html
-  (blink-cursor-mode -1))  ;; https://www.emacswiki.org/emacs/NonBlinkingCursor
+  ;; Frame Title: https://www.emacswiki.org/emacs/FrameTitle
+  (setq frame-title-format '(buffer-file-name "%f" ("%b")))
+  ;; Tooltips: https://www.gnu.org/software/emacs/manual/html_node/emacs/Tooltips.htmlm
+  (tooltip-mode -1)
+  ;; Mouse Commands: https://www.gnu.org/software/emacs/manual/html_node/emacs/Mouse-Commands.html
+  (mouse-wheel-mode t)
+  ;; Non Blinking Cursor: https://www.emacswiki.org/emacs/NonBlinkingCursor
+  (blink-cursor-mode -1))
+
+(when IS-MACOS
+  ;; Do not make new frames when opening a new file with Emacs.
+  (setq ns-pop-up-frames nil)
+  ; FullScreen: https://www.emacswiki.org/emacs/FullScreen
+  (custom-set-variables
+   '(initial-frame-alist (quote ((fullscreen . maximized))))))
+
+;; Exec-path-from-shell: Ensure environment variables inside Emacs look the same as in the user's shell.
+;;   https://github.com/purcell/exec-path-from-shell
+(use-package exec-path-from-shell
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
 
 ;; Turn off alarms completely.
 ;;   https://www.emacswiki.org/emacs/AlarmBell
@@ -143,7 +149,8 @@
 ;;   https://www.gnu.org/software/emacs/manual/html_node/efaq/Displaying-the-current-line-or-column.html
 (setq-default column-number-mode t)
 (when (version<= "26.0.50" emacs-version)
-  (global-display-line-numbers-mode))  ;; https://www.emacswiki.org/emacs/LineNumbers
+  ;; https://www.emacswiki.org/emacs/LineNumbers
+  (global-display-line-numbers-mode))
 
 ;; Use only spaces and set the tab width.
 ;;   https://www.emacswiki.org/emacs/IndentationBasics
@@ -159,10 +166,14 @@
 (setq-default require-final-newline t)
 
 ;; Show trailing whitespace and delete on save.
-(setq-default show-trailing-whitespace t)  ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Useless-Whitespace.html
-(add-hook 'before-save-hook 'delete-trailing-whitespace)  ;; https://www.emacswiki.org/emacs/DeletingWhitespace
+(setq-default show-trailing-whitespace t)
 
-;; Configure whitespace mode
+;; Delete whitespace on save.
+;;   https://www.emacswiki.org/emacs/DeletingWhitespace
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;; Whitespace: Configure whitespace mode.
+;;   https://www.emacswiki.org/emacs/WhiteSpace
 (use-package whitespace
   :elpaca nil
   :bind ("\C-c w" . whitespace-mode)
@@ -171,18 +182,46 @@
   (setq whitespace-line-column 80)
   (setq whitespace-style '(empty tabs lines-tail trailing))
   (setq whitespace-style '(face trailing empty indentation space-after-tab space-before-tab))
-  (whitespace-mode t))
+  (whitespace-mode))
 
 ;; Highlight current line
 ;;   https://www.emacswiki.org/emacs/HighlightCurrentLine
-(global-hl-line-mode 1)
+(global-hl-line-mode)
 
 ;; Highlight matching pairs of parentheses and other characters when the point is on them.
 ;;   https://www.emacswiki.org/emacs/ShowParenMode
-(show-paren-mode 1)
+(show-paren-mode)
+
+;; Rainbow-delimiters: A 'rainbow parentheses'-like mode which highlights
+;; delimiters such as parentheses, brackets or braces according to their depth.
+;;   https://github.com/Fanael/rainbow-delimiters
+(use-package rainbow-delimiters
+  :diminish
+  :init (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+
+;; Rainbow-mode: Colorize color names in buffers.
+;;   https://elpa.gnu.org/packages/rainbow-mode.html
+(use-package rainbow-mode
+  :diminish
+  :init (add-hook 'prog-mode-hook 'rainbow-mode))
+
+;; Paredit: Parenthetical editing in Emacs.
+;;   https://paredit.org/
+(use-package paredit
+  :diminish
+  :init (autoload 'enable-paredit-mode "paredit" t)
+  :config
+  (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
+  (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+  (add-hook 'ielm-mode-hook #'enable-paredit-mode)
+  (add-hook 'lisp-mode-hook #'enable-paredit-mode)
+  (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+  (add-hook 'scheme-mode-hook #'enable-paredit-mode)
+  (add-hook 'yuck-mode-hook #'enable-paredit-mode))
 
 ;; Emacs’s built-in ispell package handles spell-checking and correction.
 ;; GNU Aspell is a Free and Open Source spell checker designed to eventually replace Ispell.
+;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Spelling.html
 (setq-default ispell-dictionary "en_US")
 (setq-default ispell-program-name (if IS-GNULINUX "/usr/bin/aspell" (if IS-MACOS "/usr/local/bin/aspell")))
 ;; Flyspell provides on-the-fly checking and highlighting of misspellings.
@@ -190,56 +229,22 @@
   '(when (executable-find ispell-program-name)
      (add-hook 'text-mode-hook 'turn-on-flyspell)))
 
-;; An extensible thesaurus mode for emacs.
+;; Synosaurus: An extensible thesaurus mode.
 ;;   https://github.com/hpdeifel/synosaurus
-;; Install wordnet for a local lexical database:
-;;    https://wordnet.princeton.edu
+;; Must install wordnet for a local lexical database:
+;;   https://wordnet.princeton.edu
 (use-package synosaurus)
-
-;; Set cursor color.
-;;   https://www.gnu.org/software/emacs/manual/html_node/eintr/X11-Colors.html
-(set-cursor-color "#f0dfaf")
-
-;; If the cursor gets too close to the pointer, displace the pointer by a random distance and direction.
-;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Mouse-Avoidance.html
-(mouse-avoidance-mode 'jump)
-
-;; Keep cursor in same relative row and column during PgUP/DN.
-;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Scrolling.html
-(setq scroll-preserve-screen-position t)
 
 ;; Automatically rescan the Imenu facility.
 ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Imenu.html
 (setq-default imenu-auto-rescan t)
 
-;; Some users want to always use `y-or-n-p', never `yes-or-no-p'.
+;; Always use `y-or-n-p', never `yes-or-no-p'.
 ;;   https://www.emacswiki.org/emacs/YesOrNoP
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;; Enable dead keys.
-;;   https://www.emacswiki.org/emacs/DeadKeys
-(require 'iso-transl)
-
-;; Delete selection on a key press.
-;;   https://www.emacswiki.org/emacs/DeleteSelectionMode
-(delete-selection-mode t)
-
- ;; Make identical buffer names unique.
- (setq uniquify-buffer-name-style 'reverse
-	uniquify-separator "|"
-	uniquify-after-kill-buffer-p t
-	uniquify-ignore-buffers-re "^\\*")
-
-;; Improve the standard text representation of various identifiers/symbols.
-(global-prettify-symbols-mode 1)
-(setq prettify-symbols-alist '(
-    ("lambda" . ?λ)
-    ("->" . ?→)
-    ("=>" . ?⇒)
-    ("map" . ?↦)))
-
+;; Prompt before quit.
 (defun ask-before-closing ()
-  "Prompt before quit."
   (interactive)
   (if (y-or-n-p (format "Are you sure you want to quit Emacs? "))
       (if (< emacs-major-version 22)
@@ -249,15 +254,15 @@
 (global-set-key (kbd "C-x C-c") 'ask-before-closing)
 (global-set-key (kbd "C-z") 'ask-before-closing)
 
+;; Kill all buffers, leaving *scratch* only.
 (defun nuke ()
-  "Kill all buffers, leaving *scratch* only."
   (interactive)
   (mapcar (lambda (x) (kill-buffer x)) (buffer-list))
   (delete-other-windows)
   (recentf-nuke))
 
-(defun recentf-nuke ()
-  "Remove all files from `recentf-list'."
+;; Remove all files from `recentf-list'.
+(defun nuke-recent-f ()
   (interactive)
   (let ((count (length recentf-list)))
     (setq recentf-list
@@ -272,39 +277,55 @@
                    (t (format "%d files" count)))))
   (setq recentf-update-menu-p t))
 
+;; Enable dead keys.
+;;   https://www.emacswiki.org/emacs/DeadKeys
+(require 'iso-transl)
+
+;; Delete selection on a key press.
+;;   https://www.emacswiki.org/emacs/DeleteSelectionMode
+(delete-selection-mode)
+
+;; Make identical buffer names unique.
+(setq uniquify-buffer-name-style 'reverse
+   uniquify-separator "|"
+   uniquify-after-kill-buffer-p t
+   uniquify-ignore-buffers-re "^\\*")
+
 ;; Follow symlinks and do not ask.
 ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/General-VC-Options.html
 (setq vc-follow-symlinks t)
 
 ;; Automatically reverts the current buffer when its visited file changes on disk.
 ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Reverting.html
-(global-auto-revert-mode 1)
+(global-auto-revert-mode)
 
-;; Jump to things in Emacs tree-style.
+;; Improve the standard text representation of various identifiers/symbols.
+(global-prettify-symbols-mode)
+(setq prettify-symbols-alist '(
+    ("lambda" . ?λ)
+    ("->" . ?→)
+    ("=>" . ?⇒)
+    ("map" . ?↦)))
+
+;; Avy: Jump to things in Emacs tree-style.
 ;;   https://github.com/abo-abo/avy
 (use-package avy
   :bind (("M-g e" . avy-goto-word-0)))
 
-;; Multiple cursors for emacs.
+;; Multiple-cursors: Multiple cursors for emacs.
 ;;   https://github.com/magnars/multiple-cursors.el
-(use-package multiple-cursors)
+(use-package multiple-cursors
+  :bind
+  ("C-c C-SPC" . mc/edit-lines)
+  ("C->" . mc/mark-next-like-this)
+  ("C-<" . mc/mark-previous-like-this)
+  ("C-c C->" . mc/mark-all-like-this))
 
-;; A template system for Emacs.
-;;   https://github.com/joaotavora/yasnippet
-(use-package yasnippet
-  :diminish yas-minor-mode
-  :config
-  (yas-global-mode 1)
-  (setq yas-snippet-dirs (append yas-snippet-dirs
-                                 '("~/.emacs.d/snippets"))))
-
-;; Which Key displays available keybindings in a popup.
+;; Which-key: Display available keybindings in a popup.
 ;;   https://github.com/justbur/emacs-which-key
 (use-package which-key
-  :diminish which-key-mode
-  :init
-  (setq which-key-separator " ")
-  (setq which-key-prefix-prefix "+")
+  :diminish
+  :init (setq which-key-separator " ")
   :config
   (which-key-add-key-based-replacements
     "C-c &" "Yasnippet"
@@ -313,39 +334,15 @@
     "C-c a m" "Move"
     "C-c a c" "Copy"
     "C-c a k" "Kill"
-    "C-c m" "multiple cursors")
-  (which-key-mode 1))
+    "C-c C-SPC" "multiple cursors")
+  (which-key-mode))
 
-;; A better solution for incremental narrowing in Emacs.
-;;   https://github.com/raxod502/selectrum
-(use-package selectrum
-  :init (selectrum-mode +1))
-
-;; Simple but effective sorting and filtering for Emacs.
-;;   https://github.com/raxod502/prescient.el
-(use-package selectrum-prescient
-  :init (selectrum-prescient-mode +1)
-       (prescient-persist-mode +1))
-
-;; Company
-(use-package company
-  :init (global-company-mode +1)
-  :config
-  (add-hook 'company-mode-hook
-            #'(lambda ()
-               (define-key company-active-map (kbd "C-n") 'company-select-next-or-abort)
-               (define-key company-active-map (kbd "C-p") 'company-select-previous-or-abort))))
-
-(use-package company-prescient
-  :config
-  (company-prescient-mode +1))
-
-;; An interactive tail mode that allows you to filter the tail with unix pipes and highlight
-;; the contents of the tailed file. Works locally or on remote files using tramp.
+;; Itail: An interactive tail mode that allows you to filter the tail with unix pipes and
+;; highlight the contents of the tailed file. Works locally or on remote files using tramp.
 ;;   https://github.com/re5et/itail
 (use-package itail)
 
-;; Org mode, your life in plain text.
+;; Org-mode: Your life in plain text.
 ;;   https://orgmode.org/
 (use-package org
   :config (setq
@@ -355,62 +352,273 @@
                                (sequence "|"  "WAITING(w)" "CANCELED(c)"))
            org-agenda-files '("~/.org/agenda.org")))
 
-;; Reformat tool for JSON
-;;   https://github.com/gongo/json-reformat#configuration
+;; Orglink: Use org-mode links in other modes.
+;;   https://github.com/tarsius/orglink
+(use-package orglink
+  :diminish
+  :config (global-orglink-mode))
+
+;; Yankpad: Insert Emacs text snippets from org-mode.
+;;   http://github.com/Kungsgeten/yankpad
+(use-package yankpad
+  :bind ("M-+" . yankpad-insert)
+  :init
+  (unless (package-installed-p 'yankpad)
+    (package-vc-install "https://github.com/Kungsgeten/yankpad")))
+
+;; YASnippet: A template system for Emacs.
+;;   https://github.com/joaotavora/yasnippet
+(use-package yasnippet
+  :diminish
+  :bind ("M-+" . yas-insert-snippet)
+  :config
+  (yas-global-mode)
+  (setopt yas-snippet-dirs (append yas-snippet-dirs
+                                 '("~/.emacs.d/snippets")))
+  (yas-global-mode)
+  (add-to-list 'hippie-expand-try-functions-list #'yas-hippie-try-expand))
+
+;; JSON-reformat: Reformat tool for JSON.
+;;   https://github.com/gongo/json-reformat
 (use-package json-reformat
   :config (setq json-reformat:indent-width 2))
 
-;; Magit: a git porcelain inside emacs.
+;; Magit: A git porcelain inside emacs.
 ;;   https://magit.vc
 (use-package magit
   :commands (magit-status)
   :bind ("C-x g" . magit-status))
 
-;; Forge allows you to work with Git forges, such as Github and Gitlab.
+;; Forge: Allows Magit to work with Git forges, such as Github and Gitlab.
 ;;   https://magit.vc/manual/forge/
 (use-package forge
   :after magit)
 
-;; GitTimemachine: step through historic versions of git controlled files.
-;;   https://gitlab.com/pidu/git-timemachine
+;; GitTimemachine: Step through historic versions of git controlled files.
+;;   https://codeberg.org/pidu/git-timemachine
 (use-package git-timemachine)
 
-;; Git gutter
+;; Git gutter: Show information in the gutter about files in a git repository.
 ;;   https://github.com/syohex/emacs-git-gutter
 (if (display-graphic-p)
   (use-package git-gutter
-    :diminish git-gutter-mode
-    :init
-    (setq global-linum-mode nil)
-    (global-git-gutter-mode +1)))
+    :diminish
+    :init (setq global-linum-mode nil)(global-git-gutter-mode)))
 
-;; Dashboard: An extensible emacs startup screen showing you what’s most important.
-;;   https://github.com/emacs-dashboard/emacs-dashboard
-(use-package dashboard
-  :elpaca t
-  :config
-  (add-hook 'elpaca-after-init-hook #'dashboard-insert-startupify-lists)
-  (add-hook 'elpaca-after-init-hook #'dashboard-initialize)
-  (dashboard-setup-startup-hook))
-
-(use-package major-mode-hydra
-  :bind ("M-SPC" . major-mode-hydra))
-
+;; Python-pytest: Integrate the python pytest test runner.
+;;   https://github.com/wbolster/emacs-python-pytest
 (use-package python-pytest
   :bind (("C-c C-x t" . python-pytest-dispatch)))
 
-(use-package ansible
-  :config
-  (use-package ansible-doc
-    :init (add-hook 'yaml-mode-hook 'ansible-doc-mode))
-  (use-package ansible-vault
-    :init (add-hook 'yaml-mode-hook 'ansible-vault-mode-maybe)))
+;; Ansible: An Ansible minor mode.
+;;   https://github.com/k1LoW/emacs-ansible
+(use-package ansible)
 
+;; Ansible-doc: Documentation lookup.
+;;   https://github.com/lunaryorn/ansible-doc.el
+(use-package ansible-doc
+  :init (add-hook 'yaml-mode-hook 'ansible-doc-mode))
+
+;; Ansible-vault: Minor mode for in place manipulation of ansible-vault.
+;;   http://github.com/zellio/ansible-vault-mode
+(use-package ansible-vault
+  :init (add-hook 'yaml-mode-hook 'ansible-vault-mode-maybe))
+
+;; Haskell-mode: A Haskell editing mode
+;;   https://github.com/haskell/haskell-mode
+(use-package haskell-mode)
+
+;; Treesit-auto: Automatically install and use tree-sitter major modes.
+;;   https://github.com/renzmann/treesit-auto
 (use-package treesit-auto
-  :custom
-  (treesit-auto-install t)
-  :config
-  (treesit-auto-add-to-auto-mode-alist 'all)
-  (global-treesit-auto-mode))
+  :custom (treesit-auto-install t)
+  :config (treesit-auto-add-to-auto-mode-alist 'all)(global-treesit-auto-mode))
 
+;; Enable indentation+completion using the TAB key.
+;; `completion-at-point' is often bound to M-TAB.
+(setq tab-always-indent 'complete)
+
+;; Consult: Provides search and navigation based on completing-read.
+;;   https://github.com/minad/consult
+(use-package consult
+  :after vertico
+  :bind (("C-x b"       . consult-buffer)
+         ("C-x C-k C-k" . consult-kmacro)
+         ("M-y"         . consult-yank-pop)
+         ("M-g g"       . consult-goto-line)
+         ("M-g M-g"     . consult-goto-line)
+         ("M-g f"       . consult-flymake)
+         ("M-g i"       . consult-imenu)
+         ("M-s l"       . consult-line)
+         ("M-s L"       . consult-line-multi)
+         ("M-s u"       . consult-focus-lines)
+         ("M-s g"       . consult-ripgrep)
+         ("M-s M-g"     . consult-ripgrep)
+         ("C-x C-SPC"   . consult-global-mark)
+         ("C-x M-:"     . consult-complex-command)
+         ("C-c n"       . consult-org-agenda)
+         ("C-c m"       . my/notegrep)
+         :map minibuffer-local-map
+         ("M-r" . consult-history))
+  :custom (completion-in-region-function #'consult-completion-in-region)
+  :config
+  (defun my/notegrep ()
+    ;; Use interactive grepping to search my notes.
+    (interactive)
+    (consult-ripgrep org-directory))
+  (recentf-mode))
+
+;; Consult-dir: Insert paths into the minibuffer prompt.
+;;   https://github.com/karthink/consult-dir
+(use-package consult-dir
+  :bind (("C-x C-d" . consult-dir)
+         :map minibuffer-local-completion-map
+         ("C-x C-d" . consult-dir)
+         ("C-x C-j" . consult-dir-jump-file)))
+
+;; Consult-recoll: Index and search PDFs, org and other text files and emails.
+;;   https://codeberg.org/jao/consult-recoll
+(use-package consult-recoll
+  :bind (("M-s r" . consult-recoll))
+  :init (setq consult-recoll-inline-snippets t)
+  :config
+  ;; Keep searches up to daate by starting the indexing deamon.
+  (defun recoll-index (&optional args)
+    (interactive)
+    (let ((recollindex-buffer "*RECOLLINDEX*"))
+      (unless (process-live-p (get-buffer-process (get-buffer recollindex-buffer)))
+        (make-process :name "recollindex"
+                      :buffer recollindex-buffer
+                      :command '("recollindex" "-m" "-D")))))
+  (eval-after-load 'consult-recoll
+    (recoll-index)))
+
+;; Vertico: VERTical Interactive COmpletion.
+;;   https://github.com/minad/vertico
+(use-package vertico
+  :init
+  ;; Enable vertico using the vertico-flat-mode
+  (require 'vertico-directory)
+  (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy)
+  :config
+  ;; Do not allow the cursor in the minibuffer prompt
+  (setq minibuffer-prompt-properties
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+  (setq enable-recursive-minibuffers t)
+  (vertico-mode))
+
+;; Orderless: Completion style for matching regexps in any order.
+;;   https://github.com/oantolin/orderless
+(use-package orderless
+  :commands (orderless)
+  :custom (completion-styles '(orderless flex)))
+
+;; Marginalia: Add (marks or annotations) marginalia to the minibuffer completions.
+;;   https://github.com/minad/marginalia
+(use-package marginalia
+  :custom
+  (marginalia-annotators
+   '(marginalia-annotators-heavy marginalia-annotators-light nil))
+  :config (marginalia-mode))
+
+;; Embark: Emacs Mini-Buffer Actions Rooted in Keymaps.
+;;   https://github.com/oantolin/embark
+(use-package embark
+  :bind
+  (("C-." . embark-act)
+   ("M-." . custom-embark-dwim)
+   ([remap describe-bindings] . embark-bindings)
+   :map embark-file-map
+   ("C-=" . dragon-drop)
+   :map embark-defun-map)
+  :custom
+  (embark-indicators
+   '(embark-highlight-indicator
+     embark-isearch-highlight-indicator
+     embark-minimal-indicator))
+  :init
+  ;; Optionally replace the key help with a completing-read interface.
+  (setq prefix-help-command #'embark-prefix-help-command)
+  ;; Selecting commands via completions instead of key bindings.
+  (setq embark-prompter 'embark-completing-read-prompter)
+  :config
+  ;; Simple drag-and-drop source/sink for X or Wayland.
+  (defun dragon-drop (file)
+    (start-process-shell-command "dragon-drop" nil
+                                 (concat "dragon-drop " file)))
+  ;; Previews candidate in vertico buffer, unless it's a consult command.
+  (defun custom-embark-dwim ()
+    (interactive)
+    (unless (bound-and-true-p consult--preview-function)
+      (save-selected-window
+        (let ((embark-quit-after-action nil))
+          (embark-dwim))))))
+
+;; Embark-consult: Consult integration for Embark.
+;;   https://github.com/oantolin/embark/blob/master/embark-consult.el
+(use-package embark-consult
+  :after (:all embark consult)
+  :hook (embark-collect-mode . consult-preview-at-point-mode))
+
+;; Corfu: COmpletion in Region FUnction.
+;;  https://github.com/minad/corfu
+(use-package corfu
+  :custom
+  (corfu-auto t)                        ;; Enable auto completion.
+  (corfu-auto-delay 0.8)                ;; Delay for auto completion.
+  (corfu-auto-prefix 2)                 ;; Minimum length of prefix for auto completion.
+  (corfu-popupinfo-delay '(0.5 . 0.2))  ;; Automatically update info popup.
+  (corfu-cycle t)                       ;; Enable cycling for candidates.
+  (corfu-preview-current 'insert)       ;; Insert previewed candidate.
+  (corfu-preselect 'prompt)             ;; Preselect the prompt.
+  (corfu-on-exact-match nil)            ;; Configure handling of exact matches.
+  :bind
+  (:map corfu-map
+        ("M-SPC"      . corfu-insert-separator)
+        ("TAB"        . corfu-next)
+        ([tab]        . corfu-next)
+        ("S-TAB"      . corfu-previous)
+        ([backtab]    . corfu-previous)
+        ("S-<return>" . corfu-insert)
+        ("RET"        . nil))
+  :init
+  (global-corfu-mode)
+  (corfu-history-mode)
+  (corfu-popupinfo-mode)
+  :config
+  (add-hook 'eshell-mode-hook
+            (lambda () (setq-local corfu-quit-at-boundary t
+                              corfu-quit-no-match t
+                              corfu-auto nil)
+              (corfu-mode))))
+
+;; Corfu-prescient: Simple but effective sorting and filtering for Emacs.
+;;   https://github.com/raxod502/prescient.el
+(use-package corfu-prescient
+  :init (corfu-prescient-mode)(prescient-persist-mode))
+
+;; Cape: Completion at point extensions.
+;;  https://github.com/minad/cape
+(use-package cape
+  :defer 10
+  :bind
+  ("M-/" . cape-dabbrev)
+  ("C-c f" . cape-file))
+
+;; Org-ai: Use ChatGPT and other LLMs in org-mode and beyond.
+;;   https://github.com/rksm/org-ai
+(use-package org-ai
+  ;; Default keybinding of C-c M-a
+  :load-path (lambda () "~/.emacs.d/elpaca/repos/org-ai/")
+  :commands (org-ai-mode org-ai-global-mode)
+  :init
+  (add-hook 'org-mode-hook #'org-ai-mode)
+  (org-ai-global-mode)
+  :config
+  (setq org-ai-default-chat-model "gpt-4")
+  (org-ai-install-yasnippets))
+
+;; Set up Emacs as an edit server, so that it "listens" for external edit requests and acts accordingly.
+;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html
 (server-start)

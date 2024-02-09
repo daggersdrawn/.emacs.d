@@ -3,6 +3,7 @@
 
 # Packaging
 .last-package-update-day
+elpa/*
 elpaca/*
 tree-sitter/*
 
