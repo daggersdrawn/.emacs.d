@@ -348,7 +348,7 @@
   :config (setq
            org-src-fontify-natively t
            org-src-tab-acts-natively t
-           org-todo-keywords '((sequence "BACKLOG(b)" "TODO(t)" "DOING(n)" "|" "DONE(d)")
+           org-todo-keywords '((sequence "BACKLOG(b)" "TODO(t)" "ACTIVE(a)" "|" "DONE(d)")
                                (sequence "|"  "WAITING(w)" "CANCELED(c)"))
            org-agenda-files '("~/.org/agenda.org")))
 
