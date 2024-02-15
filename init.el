@@ -251,8 +251,8 @@
           (save-buffers-kill-terminal)
         (save-buffers-kill-emacs))
     (message "Canceled exit")))
-(global-set-key (kbd "C-x C-c") 'ask-before-closing)
-(global-set-key (kbd "C-z") 'ask-before-closing)
+(keymap-global-set "C-x C-c" 'ask-before-closing)
+(keymap-global-set "C-z" 'ask-before-closing)
 
 ;; Kill all buffers, leaving *scratch* only.
 (defun nuke ()
@@ -619,6 +619,9 @@
   (setq org-ai-default-chat-model "gpt-4")
   (org-ai-install-yasnippets))
 
-;; Set up Emacs as an edit server, so that it "listens" for external edit requests and acts accordingly.
+;; Custom keybindings
+(keymap-global-set "C-x 4" 'window-swap-states)
+
+;; Use up Emacs as an edit server.
 ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html
 (server-start)
