@@ -175,7 +175,7 @@
 ;; Whitespace: Configure whitespace mode.
 ;;   https://www.emacswiki.org/emacs/WhiteSpace
 (use-package whitespace
-  :elpaca nil
+  :ensure nil
   :bind ("\C-c w" . whitespace-mode)
   :config
   (setq whitespace-action '(auto-cleanup))
