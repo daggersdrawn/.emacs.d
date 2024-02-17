@@ -610,6 +610,7 @@
 ;;   https://github.com/rksm/org-ai
 (use-package org-ai
   ;; Default keybinding of C-c M-a
+  :ensure t
   :load-path (lambda () "~/.emacs.d/elpaca/repos/org-ai/")
   :commands (org-ai-mode org-ai-global-mode)
   :init
