@@ -633,6 +633,7 @@
 
 ;; Custom keybindings
 (keymap-global-set "C-x 4" 'window-swap-states)
+(keymap-global-set "s-/" 'comment-or-uncomment-region)
 
 ;; Use up Emacs as an edit server.
 ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html
