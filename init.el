@@ -81,7 +81,7 @@
 
 ;; Globally set the default font.
 ;;   https://www.emacswiki.org/emacs/SetFonts
-(set-face-attribute 'default nil :font "InconsolataGo Nerd Font-16")
+(set-face-attribute 'default nil :font "Inconsolata Nerd Font Mono-16" :weight 'bold)
 
 ;; Default-text-scale: Easily adjust the font size in all Emacs frames.
 ;;   https://github.com/purcell/default-text-scale
