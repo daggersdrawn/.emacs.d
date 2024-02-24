@@ -619,6 +619,18 @@
   (setq org-ai-default-chat-model "gpt-4")
   (org-ai-install-yasnippets))
 
+;; Speech-to-Text interface using OpenAI’s whisper speech recognition model.
+;;   https://github.com/natrys/whisper.el
+(use-package whisper
+  :elpaca (whisper :host github :repo "natrys/whisper.el")
+  :bind ("C-s-r" . whisper-run)
+  :config
+  (setq whisper-install-directory "~/.cache/"
+        whisper-model "base"
+        whisper-language "en"
+        whisper-translate nil
+        whisper-use-threads (/ (num-processors) 2)))
+
 ;; Custom keybindings
 (keymap-global-set "C-x 4" 'window-swap-states)
 
