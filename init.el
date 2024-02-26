@@ -631,6 +631,13 @@
         whisper-translate nil
         whisper-use-threads (/ (num-processors) 2)))
 
+;; Edit file as sudo
+(defun sudo-edit (&optional arg)
+  (interactive "p")
+  (if (or arg (not buffer-file-name))
+      (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
+    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+
 ;; Custom keybindings
 (keymap-global-set "C-x 4" 'window-swap-states)
 (keymap-global-set "s-/" 'comment-or-uncomment-region)
