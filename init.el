@@ -193,7 +193,7 @@
 (show-paren-mode)
 
 ;; Rainbow-delimiters: A 'rainbow parentheses'-like mode which highlights
-;; delimiters such as parentheses, brackets or braces according to their depth.
+;; delimiters such as parentheses, brackets, or braces according to their depth.
 ;;   https://github.com/Fanael/rainbow-delimiters
 (use-package rainbow-delimiters
   :diminish
@@ -476,7 +476,7 @@
          ("C-x C-d" . consult-dir)
          ("C-x C-j" . consult-dir-jump-file)))
 
-;; Consult-recoll: Index and search PDFs, org and other text files and emails.
+;; Consult-recoll: Index and search PDFs, org, and other text files and emails.
 ;;   https://codeberg.org/jao/consult-recoll
 (use-package consult-recoll
   :bind (("M-s r" . consult-recoll))
@@ -631,14 +631,18 @@
         whisper-translate nil
         whisper-use-threads (/ (num-processors) 2)))
 
-;; Edit file as sudo
+;; Upload images, files, and blocks of code to to 0x0.st
+;;   https://git.sr.ht/~willvaughn/emacs-0x0/
+(use-package 0x0)
+
+;; Edit file as sudo.
 (defun sudo-edit (&optional arg)
   (interactive "p")
   (if (or arg (not buffer-file-name))
       (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
-;; Custom keybindings
+;; Custom keybindings.
 (keymap-global-set "C-x 4" 'window-swap-states)
 (keymap-global-set "s-/" 'comment-or-uncomment-region)
 
