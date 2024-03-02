@@ -624,7 +624,7 @@
 ;; Speech-to-Text interface using OpenAI’s whisper speech recognition model.
 ;;   https://github.com/natrys/whisper.el
 (use-package whisper
-  :elpaca (whisper :host github :repo "natrys/whisper.el")
+  :ensure (whisper :host github :repo "natrys/whisper.el")
   :bind ("C-s-r" . whisper-run)
   :config
   (setq whisper-install-directory "~/.cache/"
