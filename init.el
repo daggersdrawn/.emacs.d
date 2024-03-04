@@ -429,6 +429,10 @@
 ;;   https://github.com/haskell/haskell-mode
 (use-package haskell-mode)
 
+;; Wrap region: Wraps a region with punctuations or tags.
+;;   https://github.com/rejeep/wrap-region.el
+(use-package wrap-region)
+
 ;; Treesit-auto: Automatically install and use tree-sitter major modes.
 ;;   https://github.com/renzmann/treesit-auto
 (use-package treesit-auto
