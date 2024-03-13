@@ -115,7 +115,8 @@
   (setq auto-save-file-name-transforms
         `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
   (setq custom-file (no-littering-expand-etc-file-name "custom.el"))
-  (setq make-backup-files nil))
+  (setq make-backup-files nil)
+  (setq create-lockfiles nil))
 
 ;; When emacs is running in a window system and not in a character based-terminal.
 ;;   https://www.gnu.org/software/emacs/manual/html_node/elisp/Window-Systems.html
