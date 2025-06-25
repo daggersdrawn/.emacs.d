@@ -130,6 +130,11 @@
   ;; Non Blinking Cursor: https://www.emacswiki.org/emacs/NonBlinkingCursor
   (blink-cursor-mode -1))
 
+(when IS-GNULINUX
+  ;; Use up Emacs as an edit server.
+  ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html
+  (server-start))
+
 (when IS-MACOS
   ;; Do not make new frames when opening a new file with Emacs.
   (setq ns-pop-up-frames nil)
