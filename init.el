@@ -367,26 +367,6 @@
   :diminish
   :config (global-orglink-mode))
 
-;; Yankpad: Insert Emacs text snippets from org-mode.
-;;   http://github.com/Kungsgeten/yankpad
-(use-package yankpad
-  :bind ("M-+" . yankpad-insert)
-  :init
-  (unless (package-installed-p 'yankpad)
-    (package-vc-install "https://github.com/Kungsgeten/yankpad")))
-
-;; YASnippet: A template system for Emacs.
-;;   https://github.com/joaotavora/yasnippet
-(use-package yasnippet
-  :diminish
-  :bind ("M-+" . yas-insert-snippet)
-  :config
-  (yas-global-mode)
-  (setopt yas-snippet-dirs (append yas-snippet-dirs
-                                 '("~/.emacs.d/snippets")))
-  (yas-global-mode)
-  (add-to-list 'hippie-expand-try-functions-list #'yas-hippie-try-expand))
-
 ;; JSON-reformat: Reformat tool for JSON.
 ;;   https://github.com/gongo/json-reformat
 (use-package json-reformat
