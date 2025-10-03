@@ -305,7 +305,11 @@
 
 ;; Automatically reverts the current buffer when its visited file changes on disk.
 ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Reverting.html
-(global-auto-revert-mode)
+(global-auto-revert-mode 1)
+
+;; Automatically reverts dired and other buffers on change.
+;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Non_002dFile-Buffers.html
+(setq global-auto-revert-non-file-buffers t)
 
 ;; Improve the standard text representation of various identifiers/symbols.
 (global-prettify-symbols-mode)
