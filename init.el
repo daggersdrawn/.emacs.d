@@ -424,9 +424,45 @@
 
 ;; Treesit-auto: Automatically install and use tree-sitter major modes.
 ;;   https://github.com/renzmann/treesit-auto
+(setopt treesit-language-source-alist
+	'((bash "https://github.com/tree-sitter/tree-sitter-bash")
+	  (rust "https://github.com/tree-sitter/tree-sitter-rust")
+	  (regex "https://github.com/tree-sitter/tree-sitter-regex")
+	  (julia "https://github.com/tree-sitter/tree-sitter-julia")
+	  (r "https://github.com/r-lib/tree-sitter-r")
+	  (svelte "https://github.com/tree-sitter-grammars/tree-sitter-svelte")
+	  (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+	  (cmake "https://github.com/uyha/tree-sitter-cmake")
+	  (css "https://github.com/tree-sitter/tree-sitter-css")
+	  (go "https://github.com/tree-sitter/tree-sitter-go")
+	  (html "https://github.com/tree-sitter/tree-sitter-html")
+	  (javascript "https://github.com/tree-sitter/tree-sitter-javascript"
+		      "master" "src")
+	  (dockerfile "https://github.com/camdencheek/tree-sitter-dockerfile")
+	  (astro "https://github.com/virchau13/tree-sitter-astro")
+	  (nix "https://github.com/nix-community/tree-sitter-nix")
+	  (json "https://github.com/tree-sitter/tree-sitter-json")
+	  (make "https://github.com/alemuller/tree-sitter-make")
+	  (haskell "https://github.com/tree-sitter/tree-sitter-haskell")
+	  (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+	  (python "https://github.com/tree-sitter/tree-sitter-python")
+	  (toml "https://github.com/tree-sitter/tree-sitter-toml")
+	  (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master"
+	       "tsx/src")
+	  (dotnet "https://github.com/profMagija/dotnet-tree-sitter.git")
+	  (typescript "https://github.com/tree-sitter/tree-sitter-typescript"
+		      "master" "typescript/src")
+	  (sql "https://github.com/DerekStride/tree-sitter-sql" "gh-pages")
+	  (typst "https://github.com/uben0/tree-sitter-typst")
+	  (yaml "https://github.com/ikatyang/tree-sitter-yaml")
+	  (zig "https://github.com/maxxnino/tree-sitter-zig")))
+(setopt treesit-font-lock-level 3)
+
 (use-package treesit-auto
   :custom (treesit-auto-install t)
-  :config (treesit-auto-add-to-auto-mode-alist 'all)(global-treesit-auto-mode))
+  :config
+  (delete 'c treesit-auto-langs)
+  (global-treesit-auto-mode))
 
 ;; Enable indentation+completion using the TAB key.
 ;; `completion-at-point' is often bound to M-TAB.
