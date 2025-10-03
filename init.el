@@ -600,20 +600,6 @@
   ("M-/" . cape-dabbrev)
   ("C-c f" . cape-file))
 
-;; Org-ai: Use ChatGPT and other LLMs in org-mode and beyond.
-;;   https://github.com/rksm/org-ai
-(use-package org-ai
-  ;; Default keybinding of C-c M-a
-  :ensure t
-  :load-path (lambda () "~/.emacs.d/elpaca/repos/org-ai/")
-  :commands (org-ai-mode org-ai-global-mode)
-  :init
-  (add-hook 'org-mode-hook #'org-ai-mode)
-  (org-ai-global-mode)
-  :config
-  (setq org-ai-default-chat-model "gpt-4")
-  (org-ai-install-yasnippets))
-
 ;; Speech-to-Text interface using OpenAI’s whisper speech recognition model.
 ;;   https://github.com/natrys/whisper.el
 (use-package whisper
