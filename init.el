@@ -24,7 +24,7 @@
 ;;   https://www.gnu.org/software/emacs/manual/html_node/elisp/Random-Numbers.html
 (random t)
 
-;; Elpaca: An Elisp Package Manager
+;; Elpaca: An Elisp Package Manager.
 ;;   https://github.com/progfolio/elpaca
 (defvar elpaca-installer-version 0.11)
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
@@ -130,15 +130,14 @@
   ;; Non Blinking Cursor: https://www.emacswiki.org/emacs/NonBlinkingCursor
   (blink-cursor-mode -1))
 
+;; Use Emacs as an edit server with GNU/Linux.
+;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html
 (when IS-GNULINUX
-  ;; Use up Emacs as an edit server.
-  ;;   https://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html
   (server-start))
 
+;; Fullscreen on MacOS.
 (when IS-MACOS
-  ;; Do not make new frames when opening a new file with Emacs.
-  (setq ns-pop-up-frames nil)
-  ; FullScreen: https://www.emacswiki.org/emacs/FullScreen
+  ;; FullScreen: https://www.emacswiki.org/emacs/FullScreen
   (custom-set-variables
    '(initial-frame-alist (quote ((fullscreen . maximized))))))
 
@@ -331,20 +330,17 @@
   ("C-c C->" . mc/mark-all-like-this))
 
 ;; Which-key: Display available keybindings in a popup.
-;;   https://github.com/justbur/emacs-which-key
-(use-package which-key
-  :diminish
-  :init (setq which-key-separator " ")
-  :config
-  (which-key-add-key-based-replacements
-    "C-c &" "Yasnippet"
-    "C-c e" "Eglot"
-    "C-c a" "Avy"
-    "C-c a m" "Move"
-    "C-c a c" "Copy"
-    "C-c a k" "Kill"
-    "C-c C-SPC" "multiple cursors")
-  (which-key-mode))
+;;   https://github.com/emacs-mirror/emacs/blob/master/lisp/which-key.el
+(which-key-mode 1)
+(setopt which-key-separator " ")
+(which-key-add-key-based-replacements
+  "C-c &" "Yasnippet"
+  "C-c e" "Eglot"
+  "C-c a" "Avy"
+  "C-c a m" "Move"
+  "C-c a c" "Copy"
+  "C-c a k" "Kill"
+  "C-c C-SPC" "multiple cursors")
 
 ;; Itail: An interactive tail mode that allows you to filter the tail with unix pipes and
 ;; highlight the contents of the tailed file. Works locally or on remote files using tramp.
@@ -352,7 +348,7 @@
 (use-package itail)
 
 ;; Org-mode: Your life in plain text.
-;;   https://orgmode.org/
+;;   https://orgmode.org
 (use-package org
   :config (setq
            org-src-fontify-natively t
@@ -394,6 +390,7 @@
 
 ;; Magit: A git porcelain inside emacs.
 ;;   https://magit.vc
+(use-package transient :ensure t)
 (use-package magit
   :commands (magit-status)
   :bind ("C-x g" . magit-status))
