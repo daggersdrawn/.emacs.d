@@ -374,10 +374,13 @@
 
 ;; Magit: A git porcelain inside emacs.
 ;;   https://magit.vc
-(use-package transient :ensure t)
 (use-package magit
   :commands (magit-status)
   :bind ("C-x g" . magit-status))
+
+;; Transient: Keyboard-driven "command menus” in Magit.
+;;   https://github.com/magit/transient
+(use-package transient :ensure t)
 
 ;; Forge: Allows Magit to work with Git forges, such as Github and Gitlab.
 ;;   https://magit.vc/manual/forge/
