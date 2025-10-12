@@ -79,7 +79,6 @@
 ;; Zenburn-theme: The Zenburn color theme.
 ;;   https://github.com/bbatsov/zenburn-emacs
 (use-package zenburn-theme
-  :ensure (:host github :repo "rizumu/zenburn-emacs" :branch "enable-lexical-binding" )
   :config (load-theme 'zenburn t))
 
 ;; Globally set the default font.
