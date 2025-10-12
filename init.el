@@ -1,4 +1,4 @@
-;; init.el --- Where all the magic begins
+;; init.el --- Where all the magic begins  -*- lexical-binding: t; -*-
 ;;
 ;; "Emacs outshines all other editing software in approximately the
 ;; same way that the noonday sun does the stars. It is not just bigger
@@ -79,6 +79,7 @@
 ;; Zenburn-theme: The Zenburn color theme.
 ;;   https://github.com/bbatsov/zenburn-emacs
 (use-package zenburn-theme
+  :ensure (:host github :repo "rizumu/zenburn-emacs" :branch "enable-lexical-binding" )
   :config (load-theme 'zenburn t))
 
 ;; Globally set the default font.
