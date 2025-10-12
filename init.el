@@ -64,7 +64,9 @@
     (let ((load-source-file-function nil)) (load "./elpaca-autoloads"))))
 (add-hook 'after-init-hook #'elpaca-process-queues)
 (elpaca `(,@elpaca-order))
-;; Install use-package support
+
+;; Simplify package configuration with use-package declarations.
+;;   https://www.gnu.org/software/emacs/manual/html_node/use-package/
 (elpaca elpaca-use-package
   (elpaca-use-package-mode)
   (setq elpaca-use-package-by-default t))
